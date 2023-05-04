@@ -8,11 +8,3 @@ export const ingredientPropType = PropTypes.shape({
   image: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
 });
-
-export const burgerIngredientTypes = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-});
