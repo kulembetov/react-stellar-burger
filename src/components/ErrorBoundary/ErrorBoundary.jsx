@@ -11,7 +11,7 @@ class ErrorBoundary extends Component {
   // вызывается, когда происходит ошибка в дочернем компоненте
   componentDidCatch(error, errorInfo) {
     // выводит сообщение в консоль об ошибке и устанавливает состояние
-    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+    console.error('Ошибка:', error, errorInfo);
     this.setState({ hasError: true });
   }
 

@@ -6,7 +6,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { burgerIngredientTypes } from '../../utils/prop-types';
+import { ingredientPropType } from '../../utils/prop-types';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient.jsx';
 import styles from './BurgerConstructor.module.css';
 
@@ -93,7 +93,7 @@ const BurgerConstructor = ({ ingredients }) => {
 
 // проверяет типы пропсов, которые ожидает компонент
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(burgerIngredientTypes.isRequired).isRequired,
+  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
 };
 
 export default BurgerConstructor;
