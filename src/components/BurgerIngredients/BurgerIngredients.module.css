@@ -1,0 +1,27 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.categories {
+  display: flex;
+}
+
+.box {
+  max-height: 664px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.box::-webkit-scrollbar {
+  width: 8px;
+  background-color: #2f2f37;
+}
+
+.box::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}

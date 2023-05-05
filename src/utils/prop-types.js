@@ -1,5 +1,10 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
+// описывают ожидаемые типы пропсов объекта и могут быть использованы в других компонентах для проверки передаваемых пропсов
 export const ingredientPropType = PropTypes.shape({
-  //укажите здесь prop-types для ингридиента
+  _id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 });

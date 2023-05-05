@@ -1,0 +1,40 @@
+.list {
+  height: 664px;
+  overflow-y: scroll;
+  list-style-type: none;
+  padding-left: 0;
+  height: 464px;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--background-element);
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: var(--text-inactive-color);
+}
+
+.item {
+  max-width: 536px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+
+.ingridient {
+  margin: 0 auto;
+}
+
+.order {
+  max-width: 552px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.price {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
