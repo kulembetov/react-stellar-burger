@@ -1,6 +1,6 @@
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientPropType } from '../../utils/prop-types';
-import styles from './BurgerIngredient.module.css';
+import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
+import { ingredientPropType } from "../../utils/prop-types";
+import styles from "./BurgerIngredient.module.css";
 
 // функциональный компонент, отображающий ингредиент бургера
 const BurgerIngredient = ({ ingredient }) => {

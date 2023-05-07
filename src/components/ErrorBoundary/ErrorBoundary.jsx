@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import styles from './ErrorBoundary.module.css';
+import { Component } from "react";
+import styles from "./ErrorBoundary.module.css";
 
 // классовый компонент, который обрабатывает ошибки, возникающие в дочерних компонентах и отображает их
 class ErrorBoundary extends Component {
@@ -11,7 +11,7 @@ class ErrorBoundary extends Component {
   // вызывается, когда происходит ошибка в дочернем компоненте
   componentDidCatch(error, errorInfo) {
     // выводит сообщение в консоль об ошибке и устанавливает состояние
-    console.error('Ошибка:', error, errorInfo);
+    console.error(error, errorInfo);
     this.setState({ hasError: true });
   }
 

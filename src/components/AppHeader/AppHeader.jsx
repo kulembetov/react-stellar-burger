@@ -3,28 +3,50 @@ import {
   ListIcon,
   Logo,
   ProfileIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { useRef, useState } from 'react';
-import styles from './AppHeader.module.css';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { useRef, useState } from "react";
+import styles from "./AppHeader.module.css";
 
 // функциональный компонент, отображающий шапку приложения
 const AppHeader = () => {
   // определяет текущую секцию, изначально выбранная секция - конструктор бургеров
-  const [currentSection, setCurrentSection] = useState('burger-constructor');
+  const [currentSection, setCurrentSection] = useState("burger-constructor");
+
+  // определяет секции
+  const section = {
+    burgerConstructor: {
+      name: "Конструктор",
+      type: "burger-constructor",
+      ref: useRef(null),
+    },
+    orderFeed: {
+      name: "Лента заказов",
+      type: "order-feed",
+      ref: useRef(null),
+    },
+    profile: {
+      name: "Личный кабинет",
+      type: "profile",
+      ref: useRef(null),
+    },
+  };
 
   // прокручивает страницу к выбранной секции
   const sectionRefs = {
-    'burger-constructor': useRef(null),
-    'order-feed': useRef(null),
-    profile: useRef(null),
+    [section.burgerConstructor.type]: useRef(null),
+    [section.orderFeed.type]: useRef(null),
+    [section.profile.type]: useRef(null),
   };
 
-  // устанавливает текущую выбранную секцию и прокручивает страницу к этой категории.
+  // определяет состояние выбранной секции и скроллит к ней
   const selectSection = (selectedSection) => {
+    if (currentSection === selectedSection) {
+      return;
+    }
     setCurrentSection(selectedSection);
     const selectedSectionItem = sectionRefs[selectedSection].current;
     if (selectedSectionItem) {
-      selectedSectionItem.scrollIntoView({ behavior: 'smooth' });
+      selectedSectionItem.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -34,67 +56,84 @@ const AppHeader = () => {
       <div className={styles.logo}>
         <Logo />
       </div>
-      <nav className='pb-4 pt-4'>
+      <nav className="pb-4 pt-4">
         <ul className={`${styles.list} pb-4 pt-4`}>
           <li
-            className={`${styles.item} pl-5 pr-5`}
-            id='burger-constructor'
-            ref={sectionRefs['burger-constructor']}
-            onClick={() => selectSection('burger-constructor')}
+            className={`${styles.item} ${
+              currentSection === section.burgerConstructor.type
+                ? `${styles.disabled}`
+                : ""
+            } pl-5 pr-5`}
+            ref={sectionRefs[section.burgerConstructor.type]}
+            onClick={() => selectSection(section.burgerConstructor.type)}
           >
             <BurgerIcon
               type={
-                currentSection === 'burger-constructor'
-                  ? 'primary'
-                  : 'secondary'
+                currentSection === section.burgerConstructor.type
+                  ? "primary"
+                  : "secondary"
               }
             />
             <p
               className={
-                currentSection === 'burger-constructor'
-                  ? 'text text_type_main-default pl-2'
-                  : 'text text_type_main-default pl-2 text_color_inactive'
+                currentSection === section.burgerConstructor.type
+                  ? "text text_type_main-default pl-2"
+                  : "text text_type_main-default pl-2 text_color_inactive"
               }
             >
-              Конструктор
+              {section.burgerConstructor.name}
             </p>
           </li>
           <li
-            className={`${styles.item} pl-5`}
-            id='order-feed'
-            ref={sectionRefs['order-feed']}
-            onClick={() => selectSection('order-feed')}
+            className={`${styles.item} ${
+              currentSection === section.orderFeed.type
+                ? `${styles.disabled}`
+                : ""
+            } pl-5`}
+            ref={sectionRefs[section.orderFeed.type]}
+            onClick={() => selectSection(section.orderFeed.type)}
           >
             <ListIcon
-              type={currentSection === 'order-feed' ? 'primary' : 'secondary'}
+              type={
+                currentSection === section.orderFeed.type
+                  ? "primary"
+                  : "secondary"
+              }
             />
             <p
               className={
-                currentSection === 'order-feed'
-                  ? 'text text_type_main-default pl-2'
-                  : 'text text_type_main-default pl-2 text_color_inactive'
+                currentSection === section.orderFeed.type
+                  ? "text text_type_main-default pl-2"
+                  : "text text_type_main-default pl-2 text_color_inactive"
               }
             >
-              Лента заказов
+              {section.orderFeed.name}
             </p>
           </li>
           <li
-            className={styles.item}
-            id='profile'
-            ref={sectionRefs['profile']}
-            onClick={() => selectSection('profile')}
+            className={`${styles.item} ${
+              currentSection === section.profile.type
+                ? `${styles.disabled}`
+                : ""
+            } pl-5`}
+            ref={sectionRefs[section.profile.type]}
+            onClick={() => selectSection(section.profile.type)}
           >
             <ProfileIcon
-              type={currentSection === 'profile' ? 'primary' : 'secondary'}
+              type={
+                currentSection === section.profile.type
+                  ? "primary"
+                  : "secondary"
+              }
             />
             <p
               className={
-                currentSection === 'profile'
-                  ? 'text text_type_main-default pl-2 pr-5'
-                  : 'text text_type_main-default pl-2 pr-5 text_color_inactive'
+                currentSection === section.profile.type
+                  ? "text text_type_main-default pl-2 pr-5"
+                  : "text text_type_main-default pl-2 pr-5 text_color_inactive"
               }
             >
-              Личный кабинет
+              {section.profile.name}
             </p>
           </li>
         </ul>
