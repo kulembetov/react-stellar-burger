@@ -15,18 +15,6 @@ const settings = {
 };
 
 // получение данных с сервера
-const getData = async () => {
-  try {
-    const response = await fetch(`${settings.baseUrl}`, {
-      method: "GET",
-      headers: settings.headers,
-    });
-    const data = await checkResponse(response);
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw console.error("Произошла ошибка при получении данных с сервера");
-  }
-};
+const getData = () => fetch(`${settings.baseUrl}`).then(checkResponse);
 
 export { getData };

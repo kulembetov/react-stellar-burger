@@ -5,11 +5,11 @@ import ReactDOM from "react-dom";
 import ModalOverlay from "../ModalOverlay/ModalOverlay.jsx";
 import styles from "./Modal.module.css";
 
+// получает корневой элемент для отображения модального окна
+const modalsRoot = document.getElementById("modals");
+
 // функциональный компонент, отображающий модальное окно
 const Modal = ({ children, onClose, title }) => {
-  // получает корневой элемент для отображения модального окна
-  const modalsRoot = document.getElementById("modals");
-
   // закрывает модальное окно при нажатии ESC
   useEffect(() => {
     const closeByEscape = (evt) => {

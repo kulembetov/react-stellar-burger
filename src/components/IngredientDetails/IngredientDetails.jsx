@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ingredientDetailsPropType } from "../../utils/prop-types.js";
+import { ingredientPropType } from "../../utils/prop-types.js";
 import Loader from "../Loader/Loader.jsx";
 import styles from "./IngredientDetails.module.css";
 
@@ -83,7 +83,7 @@ const IngredientDetails = ({ ingredientDetails }) => {
 
 // описывает типы пропсов, которые ожидает компонент
 IngredientDetails.propTypes = {
-  ingredientDetails: ingredientDetailsPropType.isRequired,
+  ingredientDetails: ingredientPropType.isRequired,
 };
 
 export default IngredientDetails;

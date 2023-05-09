@@ -15,9 +15,9 @@ import styles from "./BurgerConstructor.module.css";
 // функциональный компонент, отображающий состав и общую стоимость бургера
 const BurgerConstructor = ({ ingredients }) => {
   // определяет состояние открытия и закрытия модального окна
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // поиск булки в списке ингредиентов
+  // поиск каждого типа в списке ингредиентов
   const bun = useMemo(
     () => ingredients.filter((m) => m.type === "bun")[0],
     [ingredients]
@@ -48,12 +48,12 @@ const BurgerConstructor = ({ ingredients }) => {
 
   // обработчик открытия модального окна
   const handleOpenModal = () => {
-    setIsOpen(true);
+    setIsModalOpen(true);
   };
 
   // обработчик закрытия модального окна
   const handleCloseModal = () => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   };
 
   // определяет кнопки
@@ -109,7 +109,7 @@ const BurgerConstructor = ({ ingredients }) => {
           {button.placeOrder}
         </Button>
       </div>
-      {isOpen && (
+      {isModalOpen && (
         <Modal onClose={handleCloseModal}>
           <OrderDetails />
         </Modal>

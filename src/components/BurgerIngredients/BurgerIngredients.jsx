@@ -7,13 +7,14 @@ import BurgerIngredientItem from "../BurgerIngredientItem/BurgerIngredientItem";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
 import styles from "./BurgerIngredients.module.css";
+
 // функциональный компонент, отображающий ингредиенты для бургера в виде вкладок с категориями булок, соусов и начинок
 const BurgerIngredients = ({ ingredients }) => {
   // определяет текущую категорию ингредиентов, изначально выбранная категория - булки
   const [currentTab, setCurrentTab] = useState("buns");
 
   // определяет состояние отображения модального окна с информацией об ингредиенте
-  const [isOpenIngredient, setIsOpenIngredient] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // определяют типы ингредиентов для каждой категории
   const tab = {
@@ -38,7 +39,7 @@ const BurgerIngredients = ({ ingredients }) => {
     [tab.fillings.type]: useRef(null),
   };
 
-  // определяет состояние выбранной секции и скроллит к ней
+  // определяет состояние выбранной секции и прокручивает к ней
   const selectTab = (selectedTab) => {
     if (currentTab === selectedTab) {
       return;
@@ -87,13 +88,13 @@ const BurgerIngredients = ({ ingredients }) => {
 
   // обработка открытия модального окна
   const handleOpenModalIngredient = (item) => {
-    setIsOpenIngredient(true);
+    setIsModalOpen(true);
     setCurrentTab(item);
   };
 
   // обработка закрытия модального окна
   const handleCloseModalIngredient = () => {
-    setIsOpenIngredient(false);
+    setIsModalOpen(false);
     setCurrentTab(null);
   };
 
@@ -199,7 +200,7 @@ const BurgerIngredients = ({ ingredients }) => {
           </div>
         </div>
       </div>
-      {isOpenIngredient && (
+      {isModalOpen && (
         <Modal onClose={handleCloseModalIngredient} title="Детали ингредиента">
           <IngredientDetails ingredientDetails={currentTab} />
         </Modal>
