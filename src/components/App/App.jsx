@@ -1,25 +1,51 @@
-import { data } from '../../utils/data';
-import AppHeader from '../AppHeader/AppHeader.jsx';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor.jsx';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients.jsx';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import styles from './App.module.css';
+import { useEffect, useState } from "react";
+import { getData } from "../../api/api";
+import AppHeader from "../AppHeader/AppHeader.jsx";
+import BurgerConstructor from "../BurgerConstructor/BurgerConstructor.jsx";
+import BurgerIngredients from "../BurgerIngredients/BurgerIngredients.jsx";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import Loader from "../Loader/Loader.jsx";
+import styles from "./App.module.css";
 
-// функциональный компонент, отображающий страницу приложения
+// функциональный компонент, содержащий приложение
 const App = () => {
+  const [ingredients, setIngredients] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // вызывает функцию получения ингредиентов при первом рендеринге
+  useEffect(() => {
+    getIngredients();
+  }, []);
+
+  // получение ингредиентов, отображение индикатора загрузки
+  const getIngredients = () => {
+    setIsLoading(true);
+    getData()
+      .then((res) => {
+        setIngredients(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  // возвращает разметку, которая содержит приложение
   return (
     <ErrorBoundary>
       <div className={styles.app}>
-        <AppHeader />
-        <main className={styles.main}>
-          <section className={styles.ingredients}>
-            <h1 className='text text_type_main-large'>Соберите бургер</h1>
-            <BurgerIngredients ingredients={data} />
-          </section>
-          <section className={styles.constructor}>
-            <BurgerConstructor ingredients={data} />
-          </section>
-        </main>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <AppHeader />
+            <main className={styles.main}>
+              <BurgerIngredients ingredients={ingredients} />
+              <BurgerConstructor ingredients={ingredients} />
+            </main>
+          </>
+        )}
       </div>
     </ErrorBoundary>
   );

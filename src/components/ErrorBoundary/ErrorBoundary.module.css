@@ -1,4 +1,4 @@
 .message {
   text-align: center;
-  color: red;
+  color: var(--colors-interface-error);
 }

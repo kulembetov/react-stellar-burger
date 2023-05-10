@@ -3,28 +3,34 @@ import {
   ConstructorElement,
   CurrencyIcon,
   DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import { useMemo } from 'react';
-import { ingredientPropType } from '../../utils/prop-types';
-import BurgerIngredient from '../BurgerIngredient/BurgerIngredient.jsx';
-import styles from './BurgerConstructor.module.css';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
+import { useMemo } from "react";
+import useModal from '../../hooks/useModal';
+import { ingredientPropType } from "../../utils/prop-types";
+import BurgerIngredient from "../BurgerIngredient/BurgerIngredient.jsx";
+import Modal from "../Modal/Modal.jsx";
+import OrderDetails from "../OrderDetails/OrderDetails";
+import styles from "./BurgerConstructor.module.css";
 
 // функциональный компонент, отображающий состав и общую стоимость бургера
 const BurgerConstructor = ({ ingredients }) => {
-  // поиск булки в списке ингредиентов
+  // определяет состояние открытия и закрытия модального окна
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  // поиск каждого типа в списке ингредиентов
   const bun = useMemo(
-    () => ingredients.filter((m) => m.type === 'bun')[0],
+    () => ingredients.filter((m) => m.type === "bun")[0],
     [ingredients]
   );
 
   const sauce = useMemo(
-    () => ingredients.filter((m) => m.type === 'sauce')[0],
+    () => ingredients.filter((m) => m.type === "sauce")[0],
     [ingredients]
   );
 
   const filling = useMemo(
-    () => ingredients.filter((m) => m.type === 'filling')[0],
+    () => ingredients.filter((m) => m.type === "main")[0],
     [ingredients]
   );
 
@@ -33,7 +39,7 @@ const BurgerConstructor = ({ ingredients }) => {
     () =>
       ingredients.reduce(
         (acc, current) =>
-          current.type === 'bun'
+          current.type === "bun"
             ? acc + current.price * 2
             : acc + current.price,
         0
@@ -41,12 +47,27 @@ const BurgerConstructor = ({ ingredients }) => {
     [ingredients]
   );
 
+  // обработчик открытия модального окна
+  const handleOpenModal = () => {
+    openModal(true);
+  };
+
+  // обработчик закрытия модального окна
+  const handleCloseModal = () => {
+    closeModal(false);
+  };
+
+  // определяет кнопки
+  const button = {
+    placeOrder: "Оформить заказ",
+  };
+
   // возвращает разметку, содержащую два блока -  список ингредиентов с булками вверху и внизу, а также блок с общей стоимостью и кнопкой оформления заказа
   return (
     <div>
       <div className={`${styles.ingredient} pl-4 pb-5`}>
         <ConstructorElement
-          type='top'
+          type="top"
           isLocked={true}
           text={`${bun.name} (верх)`}
           price={bun.price}
@@ -56,16 +77,16 @@ const BurgerConstructor = ({ ingredients }) => {
         <ul className={`${styles.list} pt-5`}>
           {ingredients.map(
             (item) =>
-              item.type !== 'bun' && (
+              item.type !== "bun" && (
                 <li key={item._id} className={`${styles.item} pb-4`}>
-                  <DragIcon type='primary' />
+                  <DragIcon type="primary" />
                   <BurgerIngredient ingredient={item} />
                 </li>
               )
           )}
         </ul>
         <ConstructorElement
-          type='bottom'
+          type="bottom"
           isLocked={true}
           text={`${bun.name} (низ)`}
           price={bun.price}
@@ -75,18 +96,25 @@ const BurgerConstructor = ({ ingredients }) => {
       </div>
       <div className={`${styles.order} pt-5 pr-4`}>
         <div className={styles.price}>
-          <p className='text text_type_digits-medium'>{totalPrice}</p>
-          <CurrencyIcon type='primary' />
+          <p className="text text_type_digits-medium">{totalPrice}</p>
+          <CurrencyIcon type="primary" />
         </div>
         <Button
-          htmlType='button'
-          type='primary'
-          size='large'
+          aria-label="Оформление заказа"
+          htmlType="button"
+          type="primary"
+          size="large"
           disabled={!bun || !sauce || !filling}
+          onClick={handleOpenModal}
         >
-          Оформить заказ
+          {button.placeOrder}
         </Button>
       </div>
+      {isModalOpen && (
+        <Modal onClose={handleCloseModal}>
+          <OrderDetails />
+        </Modal>
+      )}
     </div>
   );
 };
