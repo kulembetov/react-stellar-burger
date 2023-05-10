@@ -11,11 +11,7 @@ const BurgerIngredientItem = ({ ingredient, onTab }) => {
   return (
     <div className={styles.item} onClick={() => onTab(ingredient)}>
       <Counter size="default" extraClass="m-1" className={styles.counter} />
-      <img
-        className={`${styles.image} pt-1 pb-1`}
-        src={ingredient.image}
-        alt={ingredient.name}
-      />
+      <img className="pt-1 pb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price}>
         <p className="text text_type_digits-default pr-2">{ingredient.price}</p>
         <CurrencyIcon type="primary" />

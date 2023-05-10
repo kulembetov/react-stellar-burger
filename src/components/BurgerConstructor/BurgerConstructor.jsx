@@ -5,7 +5,8 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import useModal from '../../hooks/useModal';
 import { ingredientPropType } from "../../utils/prop-types";
 import BurgerIngredient from "../BurgerIngredient/BurgerIngredient.jsx";
 import Modal from "../Modal/Modal.jsx";
@@ -15,7 +16,7 @@ import styles from "./BurgerConstructor.module.css";
 // функциональный компонент, отображающий состав и общую стоимость бургера
 const BurgerConstructor = ({ ingredients }) => {
   // определяет состояние открытия и закрытия модального окна
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   // поиск каждого типа в списке ингредиентов
   const bun = useMemo(
@@ -48,12 +49,12 @@ const BurgerConstructor = ({ ingredients }) => {
 
   // обработчик открытия модального окна
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    openModal(true);
   };
 
   // обработчик закрытия модального окна
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    closeModal(false);
   };
 
   // определяет кнопки

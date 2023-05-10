@@ -2,6 +2,7 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import useModal from "../../hooks/useModal";
 import { ingredientPropType } from "../../utils/prop-types";
 import BurgerIngredientItem from "../BurgerIngredientItem/BurgerIngredientItem";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
@@ -14,7 +15,7 @@ const BurgerIngredients = ({ ingredients }) => {
   const [currentTab, setCurrentTab] = useState("buns");
 
   // определяет состояние отображения модального окна с информацией об ингредиенте
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   // определяют типы ингредиентов для каждой категории
   const tab = {
@@ -88,14 +89,14 @@ const BurgerIngredients = ({ ingredients }) => {
 
   // обработка открытия модального окна
   const handleOpenModalIngredient = (item) => {
-    setIsModalOpen(true);
+    openModal(true);
     setCurrentTab(item);
   };
 
   // обработка закрытия модального окна
   const handleCloseModalIngredient = () => {
-    setIsModalOpen(false);
-    setCurrentTab(null);
+    openModal(false);
+    closeModal(null);
   };
 
   // определяет заголовок
