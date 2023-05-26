@@ -1,10 +1,8 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { useContext, useMemo, useRef, useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import useModal from "../../hooks/useModal";
 import { IngredientContext } from "../../services/ingredientContext";
-import { ingredientPropType } from "../../utils/prop-types";
 import BurgerIngredientItem from "../BurgerIngredientItem/BurgerIngredientItem";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
@@ -214,9 +212,4 @@ const BurgerIngredients = () => {
   );
 };
 
-// описывает типы пропсов, которые ожидает компонент
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
-};
-
-export default BurgerIngredients;
+export default React.memo(BurgerIngredients);

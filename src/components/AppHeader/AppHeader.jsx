@@ -4,7 +4,7 @@ import {
   Logo,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./AppHeader.module.css";
 
 // функциональный компонент, отображающий шапку приложения
@@ -142,4 +142,4 @@ const AppHeader = () => {
   );
 };
 
-export default AppHeader;
+export default React.memo(AppHeader);

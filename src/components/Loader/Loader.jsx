@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./Loader.module.css";
 
 // функциональный компонент, отображающий процесс загрузки
@@ -13,4 +14,4 @@ const Loader = () => {
   );
 };
 
-export default Loader;
+export default React.memo(Loader);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getData } from "../../api/api";
 import { IngredientContext } from "../../services/ingredientContext";
 import AppHeader from "../AppHeader/AppHeader.jsx";
@@ -16,6 +16,8 @@ const App = () => {
   // определяет состояние лоадера
   const [isLoading, setIsLoading] = useState(true);
 
+  const [error, setError] = useState(null);
+
   // вызывает функцию получения ингредиентов при первом рендеринге
   useEffect(() => {
     getIngredients();
@@ -24,12 +26,15 @@ const App = () => {
   // получение ингредиентов, отображение индикатора загрузки
   const getIngredients = () => {
     setIsLoading(true);
+    setError(null);
+
     getData()
       .then((res) => {
         setIngredients(res.data);
       })
       .catch((err) => {
         console.error(err);
+        setError("Произошла ошибка при загрузке ингредиентов.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -40,15 +45,17 @@ const App = () => {
   return (
     <ErrorBoundary>
       <div className={styles.app}>
-        {isLoading ? (
+        {error ? (
+          <div className={styles.error}>{error}</div>
+        ) : isLoading ? (
           <Loader />
         ) : (
           <>
             <AppHeader />
             <main className={styles.main}>
               <IngredientContext.Provider value={ingredients}>
-                <BurgerIngredients ingredients={ingredients} />
-                <BurgerConstructor ingredients={ingredients} />
+                <BurgerIngredients />
+                <BurgerConstructor />
               </IngredientContext.Provider>
             </main>
           </>
@@ -58,4 +65,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default React.memo(App);

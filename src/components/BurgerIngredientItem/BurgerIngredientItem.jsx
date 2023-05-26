@@ -2,6 +2,7 @@ import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
 import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./BurgerIngredientItem.module.css";
 
@@ -28,4 +29,4 @@ BurgerIngredientItem.propTypes = {
   ingredient: ingredientPropType.isRequired,
 };
 
-export default BurgerIngredientItem;
+export default React.memo(BurgerIngredientItem);

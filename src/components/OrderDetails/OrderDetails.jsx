@@ -1,5 +1,5 @@
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { OrderContext } from "../../services/ingredientContext";
 import { orderDetailsPropType } from "../../utils/prop-types";
 import styles from "./OrderDetails.module.css";
@@ -49,4 +49,4 @@ OrderDetails.propTypes = {
   order: orderDetailsPropType,
 };
 
-export default OrderDetails;
+export default React.memo(OrderDetails);

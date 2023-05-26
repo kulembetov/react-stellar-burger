@@ -1,4 +1,5 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
 import { totalPricePropType } from "../../utils/prop-types";
 import styles from "./TotalPrice.module.css";
 
@@ -17,4 +18,4 @@ totalPricePropType.propTypes = {
   price: totalPricePropType,
 };
 
-export default TotalPrice;
+export default React.memo(TotalPrice);

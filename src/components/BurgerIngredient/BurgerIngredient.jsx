@@ -1,4 +1,5 @@
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
 import { ingredientPropType } from "../../utils/prop-types";
 import styles from "./BurgerIngredient.module.css";
 
@@ -21,4 +22,4 @@ BurgerIngredient.propTypes = {
   ingredient: ingredientPropType.isRequired,
 };
 
-export default BurgerIngredient;
+export default React.memo(BurgerIngredient);

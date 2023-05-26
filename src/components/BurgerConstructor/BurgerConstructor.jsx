@@ -3,18 +3,14 @@ import {
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { postOrder } from "../../api/api";
 import useModal from "../../hooks/useModal";
 import {
   IngredientContext,
   OrderContext,
 } from "../../services/ingredientContext";
-import {
-  ingredientPropType,
-  orderDetailsPropType,
-} from "../../utils/prop-types";
+import { orderDetailsPropType } from "../../utils/prop-types";
 import BurgerIngredient from "../BurgerIngredient/BurgerIngredient.jsx";
 import Modal from "../Modal/Modal.jsx";
 import OrderDetails from "../OrderDetails/OrderDetails";
@@ -154,8 +150,7 @@ const BurgerConstructor = () => {
 
 // проверяет типы пропсов, которые ожидает компонент
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
   order: orderDetailsPropType,
 };
 
-export default BurgerConstructor;
+export default React.memo(BurgerConstructor);
