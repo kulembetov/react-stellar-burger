@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getData } from "../../api/api";
+import { IngredientContext } from "../../services/ingredientContext";
 import AppHeader from "../AppHeader/AppHeader.jsx";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor.jsx";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients.jsx";
@@ -9,7 +10,10 @@ import styles from "./App.module.css";
 
 // функциональный компонент, содержащий приложение
 const App = () => {
+  // определяет ингредиенты
   const [ingredients, setIngredients] = useState([]);
+
+  // определяет состояние лоадера
   const [isLoading, setIsLoading] = useState(true);
 
   // вызывает функцию получения ингредиентов при первом рендеринге
@@ -31,6 +35,7 @@ const App = () => {
         setIsLoading(false);
       });
   };
+
   // возвращает разметку, которая содержит приложение
   return (
     <ErrorBoundary>
@@ -41,8 +46,10 @@ const App = () => {
           <>
             <AppHeader />
             <main className={styles.main}>
-              <BurgerIngredients ingredients={ingredients} />
-              <BurgerConstructor ingredients={ingredients} />
+              <IngredientContext.Provider value={ingredients}>
+                <BurgerIngredients ingredients={ingredients} />
+                <BurgerConstructor ingredients={ingredients} />
+              </IngredientContext.Provider>
             </main>
           </>
         )}

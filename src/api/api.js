@@ -8,13 +8,25 @@ const checkResponse = (res) => {
 
 // объект с настройками для запросов к серверу
 const settings = {
-  baseUrl: "https://norma.nomoreparties.space/api/ingredients",
+  baseUrl: "https://norma.nomoreparties.space/api",
   headers: {
     "Content-Type": "application/json",
   },
 };
 
-// получение данных с сервера
-const getData = () => fetch(`${settings.baseUrl}`).then(checkResponse);
+// получение ингредиентов с сервера
+const getData = () =>
+  fetch(`${settings.baseUrl}/ingredients`).then(checkResponse);
 
-export { getData };
+// отправка заказа на сервер
+const postOrder = (array) => {
+  return fetch(`${settings.baseUrl}/orders`, {
+    method: "POST",
+    headers: settings.headers,
+    body: JSON.stringify({
+      ingredients: array,
+    }),
+  }).then(checkResponse);
+};
+
+export { getData, postOrder };
