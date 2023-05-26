@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ingredientPropType } from "../../utils/prop-types.js";
 import Loader from "../Loader/Loader.jsx";
 import styles from "./IngredientDetails.module.css";
@@ -86,4 +86,4 @@ IngredientDetails.propTypes = {
   ingredientDetails: ingredientPropType.isRequired,
 };
 
-export default IngredientDetails;
+export default React.memo(IngredientDetails);

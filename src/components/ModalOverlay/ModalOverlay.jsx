@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import React from "react";
 import styles from "./ModalOverlay.module.css";
 
 // функциональный компонент, отображающий область вокруг модального окна, кликнув на который - закрывается модальное окно
@@ -12,4 +13,4 @@ ModalOverlay.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default ModalOverlay;
+export default React.memo(ModalOverlay);

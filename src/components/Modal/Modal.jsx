@@ -1,6 +1,6 @@
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import ModalOverlay from "../ModalOverlay/ModalOverlay.jsx";
 import styles from "./Modal.module.css";
@@ -58,4 +58,4 @@ Modal.propTypes = {
   title: PropTypes.string,
 };
 
-export default Modal;
+export default React.memo(Modal);

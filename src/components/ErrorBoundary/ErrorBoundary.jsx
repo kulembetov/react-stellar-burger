@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import styles from "./ErrorBoundary.module.css";
 
 // классовый компонент, который обрабатывает ошибки, возникающие в дочерних компонентах и отображает их
@@ -27,4 +27,4 @@ class ErrorBoundary extends Component {
   }
 }
 
-export default ErrorBoundary;
+export default React.memo(ErrorBoundary);

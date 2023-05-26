@@ -1,16 +1,18 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { useMemo, useRef, useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import useModal from "../../hooks/useModal";
-import { ingredientPropType } from "../../utils/prop-types";
+import { IngredientContext } from "../../services/ingredientContext";
 import BurgerIngredientItem from "../BurgerIngredientItem/BurgerIngredientItem";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
 import styles from "./BurgerIngredients.module.css";
 
 // функциональный компонент, отображающий ингредиенты для бургера в виде вкладок с категориями булок, соусов и начинок
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = () => {
+  // получение значения заказа из IngredientContext
+  const ingredients = useContext(IngredientContext);
+
   // определяет текущую категорию ингредиентов, изначально выбранная категория - булки
   const [currentTab, setCurrentTab] = useState("buns");
 
@@ -210,9 +212,4 @@ const BurgerIngredients = ({ ingredients }) => {
   );
 };
 
-// описывает типы пропсов, которые ожидает компонент
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
-};
-
-export default BurgerIngredients;
+export default React.memo(BurgerIngredients);
