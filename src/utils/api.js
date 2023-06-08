@@ -1,10 +1,4 @@
-// проверяет ответ от сервера
-const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(new Error(`${res.status}`));
-};
+import { checkResponse } from "./res-ok";
 
 // объект с настройками для запросов к серверу
 const settings = {
@@ -15,18 +9,18 @@ const settings = {
 };
 
 // получение ингредиентов с сервера
-const getData = () =>
+const getIngredientsData = () =>
   fetch(`${settings.baseUrl}/ingredients`).then(checkResponse);
 
 // отправка заказа на сервер
-const postOrder = (array) => {
+const getOrderData = (ingredients) => {
   return fetch(`${settings.baseUrl}/orders`, {
     method: "POST",
     headers: settings.headers,
     body: JSON.stringify({
-      ingredients: array,
+      ingredients,
     }),
   }).then(checkResponse);
 };
 
-export { getData, postOrder };
+export { getIngredientsData, getOrderData };

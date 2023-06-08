@@ -2,16 +2,56 @@ import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, { useMemo } from "react";
+import { useDrag } from "react-dnd";
+import { useSelector } from "react-redux";
 import { ingredientPropType } from "../../utils/prop-types.js";
 import styles from "./BurgerIngredientItem.module.css";
 
 // функциональный компонент, отображающий информацию об ингредиенте бургера
 const BurgerIngredientItem = ({ ingredient, onTab }) => {
+  const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
+
+  // драгом обрабатывается забор ингредиента
+  const [{ isDragging }, drag] = useDrag({
+    type: "ingredient",
+    item: ingredient,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const opacity = isDragging ? 0.5 : 1;
+
+  //нашла длину массива ингредиентов
+  const counter = useMemo(() => {
+    const ingredientsId = ingredients.filter(
+      (item) => item._id === ingredient._id
+    );
+    return ingredientsId.length;
+  }, [ingredients, ingredient._id]);
+
+  //тк булка изначально нулевая, создала отдельное условие
+  const counterForBun = useMemo(() => {
+    if (bun === null) {
+      return 0;
+    } else if (bun !== null && ingredient._id === bun._id) {
+      return 2;
+    }
+  }, [bun, ingredient._id]);
+
   // возвращает разметку, которая содержит информацию об ингредиенте бургера - название, цену, количества, изображение
   return (
-    <div className={styles.item} onClick={() => onTab(ingredient)}>
-      <Counter size="default" extraClass="m-1" className={styles.counter} />
+    <div
+      className={styles.item}
+      style={{ opacity }}
+      ref={drag}
+      onClick={() => onTab(ingredient)}
+    >
+      {ingredient.type !== "bun" ? (
+        <Counter count={counter} className={styles.counter} />
+      ) : (
+        <Counter count={counterForBun} className={styles.counter} />
+      )}
       <img className="pt-1 pb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price}>
         <p className="text text_type_digits-default pr-2">{ingredient.price}</p>
