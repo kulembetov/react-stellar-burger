@@ -120,7 +120,7 @@ const BurgerConstructor = () => {
         )}
         <ul className={`${styles.list} pt-5`}>
           {ingredients.map((item) => (
-            <li key={item._id} className={`${styles.item} pb-4`}>
+            <li key={uuidv4()} className={`${styles.item} pb-4`}>
               <DragIcon type="primary" />
               <BurgerIngredient
                 ingredient={item}

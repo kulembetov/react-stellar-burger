@@ -1,26 +1,25 @@
-import { checkResponse } from "./res-ok";
+import { checkResponse, checkSuccess } from "./res-ok";
+// 1 раз объявляем базовый урл
+export const BASE_URL = "https://norma.nomoreparties.space/api/";
 
-// объект с настройками для запросов к серверу
-const settings = {
-  baseUrl: "https://norma.nomoreparties.space/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
+const request = (endpoint, options) => {
+  return fetch(`${BASE_URL}${endpoint}`, options)
+    .then(checkResponse)
+    .then(checkSuccess);
 };
 
 // получение ингредиентов с сервера
-const getIngredientsData = () =>
-  fetch(`${settings.baseUrl}/ingredients`).then(checkResponse);
+export const getIngredientsData = () => request("ingredients");
 
 // отправка заказа на сервер
-const getOrderData = (ingredients) => {
-  return fetch(`${settings.baseUrl}/orders`, {
+export const getOrderData = (ingredients) => {
+  return request("orders", {
     method: "POST",
-    headers: settings.headers,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       ingredients,
     }),
-  }).then(checkResponse);
+  });
 };
-
-export { getIngredientsData, getOrderData };

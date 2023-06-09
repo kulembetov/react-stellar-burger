@@ -7,7 +7,7 @@ import { ingredientPropType } from "../../utils/prop-types";
 import styles from "./BurgerIngredient.module.css";
 
 // функциональный компонент, отображающий ингредиент бургера
-const BurgerIngredient = ({ ingredient, moveIngredient }) => {
+const BurgerIngredient = ({ ingredient, moveIngredientItem }) => {
   // определяет состояние ингредиентов из Redux хранилища
   const { ingredients } = useSelector((state) => state.burgerConstructor);
 
@@ -66,7 +66,7 @@ const BurgerIngredient = ({ ingredient, moveIngredient }) => {
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
-      moveIngredient(dragIndex, hoverIndex);
+      moveIngredientItem(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
     drop(item) {
@@ -75,7 +75,7 @@ const BurgerIngredient = ({ ingredient, moveIngredient }) => {
       if (dragIndex === hoverIndex) {
         return;
       }
-      moveIngredient(dragIndex, hoverIndex);
+      moveIngredientItem(dragIndex, hoverIndex);
     },
   });
 
