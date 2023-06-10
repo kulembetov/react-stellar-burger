@@ -51,16 +51,10 @@ export const postOrder = (array) => {
     });
     getOrderData(array)
       .then((res) => {
-        if (res && res.success) {
-          dispatch({
-            type: POST_ORDER_SUCCESS,
-            order: res,
-          });
-        } else {
-          dispatch({
-            type: POST_ORDER_FAILED,
-          });
-        }
+        dispatch({
+          type: POST_ORDER_SUCCESS,
+          order: res,
+        });
       })
       .catch((err) => {
         dispatch({
