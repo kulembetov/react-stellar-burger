@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { getIngredientsData, getOrderData } from "../../utils/api";
 export const GET_DATA_REQUEST = "GET_DATA_REQUEST";
 export const GET_DATA_SUCCESS = "GET_DATA_SUCCESS";
@@ -30,16 +31,10 @@ export const getData = () => {
     });
     getIngredientsData()
       .then((res) => {
-        if (res && res.success) {
-          dispatch({
-            type: GET_DATA_SUCCESS,
-            data: res.data,
-          });
-        } else {
-          dispatch({
-            type: GET_DATA_FAILED,
-          });
-        }
+        dispatch({
+          type: GET_DATA_SUCCESS,
+          data: res.data,
+        });
       })
       .catch((err) => {
         dispatch({
@@ -86,7 +81,7 @@ export const addIngredientsConstructor = (item, keyUuid) => {
   return {
     type: ADD_INGREDIENTS_CONSTRUCTOR,
     ingredients: item,
-    key: keyUuid,
+    key: uuidv4(),
   };
 };
 
