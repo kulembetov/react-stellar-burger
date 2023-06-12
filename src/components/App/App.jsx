@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { getData } from "../../api/api";
-import { IngredientContext } from "../../services/ingredientContext";
+import React, { useState } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import AppHeader from "../AppHeader/AppHeader.jsx";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor.jsx";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients.jsx";
@@ -10,36 +10,11 @@ import styles from "./App.module.css";
 
 // функциональный компонент, содержащий приложение
 const App = () => {
-  // определяет ингредиенты
-  const [ingredients, setIngredients] = useState([]);
-
   // определяет состояние лоадера
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading] = useState(false);
 
-  const [error, setError] = useState(null);
-
-  // вызывает функцию получения ингредиентов при первом рендеринге
-  useEffect(() => {
-    getIngredients();
-  }, []);
-
-  // получение ингредиентов, отображение индикатора загрузки
-  const getIngredients = () => {
-    setIsLoading(true);
-    setError(null);
-
-    getData()
-      .then((res) => {
-        setIngredients(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Произошла ошибка при загрузке ингредиентов.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  // определяет состояние ошибки
+  const [error] = useState(null);
 
   // возвращает разметку, которая содержит приложение
   return (
@@ -53,10 +28,10 @@ const App = () => {
           <>
             <AppHeader />
             <main className={styles.main}>
-              <IngredientContext.Provider value={ingredients}>
+              <DndProvider backend={HTML5Backend}>
                 <BurgerIngredients />
                 <BurgerConstructor />
-              </IngredientContext.Provider>
+              </DndProvider>
             </main>
           </>
         )}

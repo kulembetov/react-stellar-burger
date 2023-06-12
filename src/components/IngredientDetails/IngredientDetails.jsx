@@ -1,23 +1,29 @@
 import React, { useState } from "react";
-import { ingredientPropType } from "../../utils/prop-types.js";
+import { useSelector } from "react-redux";
 import Loader from "../Loader/Loader.jsx";
 import styles from "./IngredientDetails.module.css";
 
+// определяет текст
+const text = {
+  calories: "Калории, ккал",
+  proteins: "Белки, г",
+  fat: "Жиры, г",
+  carbohydrates: "Углеводы, г",
+};
+
 // функциональный компонент, отображающий подробную информацию об ингредиенте
-const IngredientDetails = ({ ingredientDetails }) => {
+const IngredientDetails = () => {
+  // получение состояния о выбранном ингредиенте из Redux хранилища
+  const tabIngredient = useSelector(
+    (state) => state.ingredientDetails.tabIngredient
+  );
+
   // создание состояния, которое изначально скрывает Loader
   const [imageIsLoading, setImageIsLoading] = useState(false);
 
   // обработчик загрузки изображения
   const handleImageLoad = () => {
     setImageIsLoading(true);
-  };
-  // определяет текст
-  const text = {
-    calories: "Калории, ккал",
-    proteins: "Белки, г",
-    fat: "Жиры, г",
-    carbohydrates: "Углеводы, г",
   };
 
   // возвращает разметку, которая содержит изображение ингредиента, его название и энергетическую ценность
@@ -29,15 +35,15 @@ const IngredientDetails = ({ ingredientDetails }) => {
         style={{ opacity: imageIsLoading ? 1 : 0 }}
       >
         <img
-          src={ingredientDetails.image_large}
-          alt={ingredientDetails.name}
+          src={tabIngredient.image_large}
+          alt={tabIngredient.name}
           onLoad={handleImageLoad}
           onError={handleImageLoad}
         />
         <figcaption
           className={`${styles.caption} text text_type_main-medium pt-4`}
         >
-          {ingredientDetails.name}
+          {tabIngredient.name}
         </figcaption>
       </figure>
       <ul
@@ -49,7 +55,7 @@ const IngredientDetails = ({ ingredientDetails }) => {
             {text.calories}
           </p>
           <p className={`${styles.text} text text_type_digits-default`}>
-            {ingredientDetails.calories}
+            {tabIngredient.calories}
           </p>
         </li>
         <li className={`${styles.item} mr-5`}>
@@ -57,7 +63,7 @@ const IngredientDetails = ({ ingredientDetails }) => {
             {text.proteins}
           </p>
           <p className={`${styles.text} text text_type_digits-default`}>
-            {ingredientDetails.proteins}
+            {tabIngredient.proteins}
           </p>
         </li>
         <li className={`${styles.item} mr-5`}>
@@ -65,7 +71,7 @@ const IngredientDetails = ({ ingredientDetails }) => {
             {text.fat}
           </p>
           <p className={`${styles.text} text text_type_digits-default`}>
-            {ingredientDetails.fat}
+            {tabIngredient.fat}
           </p>
         </li>
         <li className={`${styles.item} pb-15`}>
@@ -73,17 +79,12 @@ const IngredientDetails = ({ ingredientDetails }) => {
             {text.carbohydrates}
           </p>
           <p className={`${styles.text} text text_type_digits-default`}>
-            {ingredientDetails.carbohydrates}
+            {tabIngredient.carbohydrates}
           </p>
         </li>
       </ul>
     </div>
   );
-};
-
-// описывает типы пропсов, которые ожидает компонент
-IngredientDetails.propTypes = {
-  ingredientDetails: ingredientPropType.isRequired,
 };
 
 export default React.memo(IngredientDetails);

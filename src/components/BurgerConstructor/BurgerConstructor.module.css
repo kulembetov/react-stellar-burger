@@ -1,9 +1,11 @@
 .list {
-  height: 664px;
-  overflow-y: scroll;
-  list-style-type: none;
-  padding-left: 0;
   height: 464px;
+  overflow-y: scroll;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 0;
 }
 
 .list::-webkit-scrollbar {
@@ -22,8 +24,13 @@
   justify-items: center;
 }
 
-.ingridient {
+.ingredient {
+  width: 600px;
+  box-sizing: border-box;
   margin: 0 auto;
+  padding-top: 100px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .order {
@@ -37,4 +44,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.tip {
+  font-size: 15px;
 }
