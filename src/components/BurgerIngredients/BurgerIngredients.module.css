@@ -34,3 +34,7 @@
 .disabled {
   cursor: default;
 }
+
+.link {
+  text-decoration: none;
+}

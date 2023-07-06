@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { setTabIngredient } from "../../services/actions/actions";
 import Loader from "../Loader/Loader.jsx";
 import styles from "./IngredientDetails.module.css";
 
@@ -18,7 +20,29 @@ const IngredientDetails = () => {
     (state) => state.ingredientDetails.tabIngredient
   );
 
-  // создание состояния, которое изначально скрывает Loader
+  // получение состояния из глобального хранилища
+  const { burgerIngredients } = useSelector((state) => state.burgerIngredients);
+
+  // определяет метод
+  const dispatch = useDispatch();
+
+  // получает id из URL
+  const { id } = useParams();
+
+  // выбирает ингредиент и добавляет его в хранилище
+  const selectIngredient = () => {
+    if (!tabIngredient) {
+      const item = burgerIngredients.find((item) => item._id === id);
+      dispatch(setTabIngredient(item));
+    }
+  };
+
+  // вызов selectIngredient при каждой отрисовке компонента
+  useEffect(() => {
+    selectIngredient();
+  });
+
+  // определяет состояние, изначально скрывающее Loader
   const [imageIsLoading, setImageIsLoading] = useState(false);
 
   // обработчик загрузки изображения

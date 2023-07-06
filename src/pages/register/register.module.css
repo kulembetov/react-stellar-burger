@@ -1,0 +1,72 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 180px;
+}
+
+.form {
+  max-width: 480px;
+}
+
+.title {
+  text-align: center;
+}
+
+.fieldset {
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
+  display: grid;
+  gap: 24px;
+}
+
+.button {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.text {
+  max-width: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile {
+  max-width: 860px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 60px;
+  padding-top: 120px;
+  padding-left: 350px;
+}
+
+.navigation {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 192px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.link_active {
+  color: var(--text-primary-color);
+}
