@@ -193,7 +193,7 @@ export const getUserFetch = () => {
       const res = await getUser();
       dispatch(setUser(res.user));
     } catch (err) {
-      // Handle error
+      console.log(err)
     }
   };
 };

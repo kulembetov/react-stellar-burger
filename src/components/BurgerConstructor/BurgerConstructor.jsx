@@ -6,6 +6,7 @@ import {
 import React, { useCallback, useMemo } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import {
   addIngredientsConstructor,
@@ -13,9 +14,9 @@ import {
   clearIngredientsConstructor,
   clearIngredientsConstructorBun,
   closeOrderDetailsModal,
+  moveIngredient,
   openOrderDetailsModal,
   postOrder,
-  moveIngredient,
 } from "../../services/actions/actions";
 import BurgerIngredient from "../BurgerIngredient/BurgerIngredient";
 import Modal from "../Modal/Modal";
@@ -36,8 +37,12 @@ const BurgerConstructor = () => {
   // определяет состояние отображения модального окна с информацией об ингредиенте
   const { isOpenOrder } = useSelector((state) => state.orderDetails);
 
-  // получение метода
+  // получение методов
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // получение пользователя из Redux хранилища
+  const { user } = useSelector((state) => state.userReducer);
 
   // обработка добавления ингредиента
   const onDropHandler = useCallback(
@@ -92,6 +97,10 @@ const BurgerConstructor = () => {
 
   // обработчик открытия модального окна
   const handleOpenModal = useCallback(() => {
+    if (user === null) {
+      navigate("/login", { replace: true });
+    }
+
     dispatch(openOrderDetailsModal());
     const allIngredients = [...orderIngredients, bun._id];
     dispatch(postOrder(allIngredients));

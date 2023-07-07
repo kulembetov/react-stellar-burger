@@ -52,62 +52,64 @@ const IngredientDetails = () => {
 
   // возвращает разметку, которая содержит изображение ингредиента, его название и энергетическую ценность
   return (
-    <div className={styles.box}>
-      {!imageIsLoading && <Loader />}
-      <figure
-        className={`${styles.figure} pb-4`}
-        style={{ opacity: imageIsLoading ? 1 : 0 }}
-      >
-        <img
-          src={tabIngredient.image_large}
-          alt={tabIngredient.name}
-          onLoad={handleImageLoad}
-          onError={handleImageLoad}
-        />
-        <figcaption
-          className={`${styles.caption} text text_type_main-medium pt-4`}
+    !!tabIngredient && (
+      <div className={styles.box}>
+        {!imageIsLoading && <Loader />}
+        <figure
+          className={`${styles.figure} pb-4`}
+          style={{ opacity: imageIsLoading ? 1 : 0 }}
         >
-          {tabIngredient.name}
-        </figcaption>
-      </figure>
-      <ul
-        className={`${styles.list} pt-4`}
-        style={{ opacity: imageIsLoading ? 1 : 0 }}
-      >
-        <li className={`${styles.item} mr-5`}>
-          <p className={`${styles.text} text text_type_main-default`}>
-            {text.calories}
-          </p>
-          <p className={`${styles.text} text text_type_digits-default`}>
-            {tabIngredient.calories}
-          </p>
-        </li>
-        <li className={`${styles.item} mr-5`}>
-          <p className={`${styles.text} text text_type_main-default`}>
-            {text.proteins}
-          </p>
-          <p className={`${styles.text} text text_type_digits-default`}>
-            {tabIngredient.proteins}
-          </p>
-        </li>
-        <li className={`${styles.item} mr-5`}>
-          <p className={`${styles.text} text text_type_main-default`}>
-            {text.fat}
-          </p>
-          <p className={`${styles.text} text text_type_digits-default`}>
-            {tabIngredient.fat}
-          </p>
-        </li>
-        <li className={`${styles.item} pb-15`}>
-          <p className={`${styles.text} text text_type_main-default`}>
-            {text.carbohydrates}
-          </p>
-          <p className={`${styles.text} text text_type_digits-default`}>
-            {tabIngredient.carbohydrates}
-          </p>
-        </li>
-      </ul>
-    </div>
+          <img
+            src={tabIngredient.image_large}
+            alt={tabIngredient.name}
+            onLoad={handleImageLoad}
+            onError={handleImageLoad}
+          />
+          <figcaption
+            className={`${styles.caption} text text_type_main-medium pt-4`}
+          >
+            {tabIngredient.name}
+          </figcaption>
+        </figure>
+        <ul
+          className={`${styles.list} pt-4`}
+          style={{ opacity: imageIsLoading ? 1 : 0 }}
+        >
+          <li className={`${styles.item} mr-5`}>
+            <p className={`${styles.text} text text_type_main-default`}>
+              {text.calories}
+            </p>
+            <p className={`${styles.text} text text_type_digits-default`}>
+              {tabIngredient.calories}
+            </p>
+          </li>
+          <li className={`${styles.item} mr-5`}>
+            <p className={`${styles.text} text text_type_main-default`}>
+              {text.proteins}
+            </p>
+            <p className={`${styles.text} text text_type_digits-default`}>
+              {tabIngredient.proteins}
+            </p>
+          </li>
+          <li className={`${styles.item} mr-5`}>
+            <p className={`${styles.text} text text_type_main-default`}>
+              {text.fat}
+            </p>
+            <p className={`${styles.text} text text_type_digits-default`}>
+              {tabIngredient.fat}
+            </p>
+          </li>
+          <li className={`${styles.item} pb-15`}>
+            <p className={`${styles.text} text text_type_main-default`}>
+              {text.carbohydrates}
+            </p>
+            <p className={`${styles.text} text text_type_digits-default`}>
+              {tabIngredient.carbohydrates}
+            </p>
+          </li>
+        </ul>
+      </div>
+    )
   );
 };
 
