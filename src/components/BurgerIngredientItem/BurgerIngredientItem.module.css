@@ -13,8 +13,14 @@
 
 .price {
   display: flex;
+  color: white;
 }
 
 .text {
+  color: white;
   text-align: center;
+}
+
+.link {
+  text-decoration: none;
 }

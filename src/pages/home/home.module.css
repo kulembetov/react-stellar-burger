@@ -1,0 +1,17 @@
+.main {
+  max-width: 1240px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  margin: 40px auto 0;
+  padding-bottom: 40px;
+}
+
+.ingredients {
+  max-width: 600px;
+}
+
+.constructor {
+  max-width: 600px;
+  padding-top: 70px;
+}

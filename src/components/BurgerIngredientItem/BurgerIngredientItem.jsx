@@ -10,9 +10,10 @@ import styles from "./BurgerIngredientItem.module.css";
 
 // функциональный компонент, отображающий информацию об ингредиенте бургера
 const BurgerIngredientItem = ({ ingredient, onTab }) => {
+  // определяет состояние ингредиентов из Redux хранилища
   const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
 
-  // драгом обрабатывается забор ингредиента
+  // обработка взятия драгом ингредиента
   const [{ isDragging }, drag] = useDrag({
     type: "ingredient",
     item: ingredient,
@@ -22,7 +23,7 @@ const BurgerIngredientItem = ({ ingredient, onTab }) => {
   });
   const opacity = isDragging ? 0.5 : 1;
 
-  //нашла длину массива ингредиентов
+  // поиск длины массива ингредиентов
   const counter = useMemo(() => {
     const ingredientsId = ingredients.filter(
       (item) => item._id === ingredient._id
@@ -30,7 +31,7 @@ const BurgerIngredientItem = ({ ingredient, onTab }) => {
     return ingredientsId.length;
   }, [ingredients, ingredient._id]);
 
-  //тк булка изначально нулевая, создала отдельное условие
+  // вычисление количества булок
   const counterForBun = useMemo(() => {
     if (bun === null) {
       return 0;

@@ -8,11 +8,12 @@
 
 .main {
   max-width: 1240px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: space-between;
   margin: 40px auto 0;
   padding-bottom: 40px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
 }
 
 .ingredients {

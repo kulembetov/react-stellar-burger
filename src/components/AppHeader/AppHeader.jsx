@@ -2,9 +2,9 @@ import {
   BurgerIcon,
   ListIcon,
   Logo,
-  ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useRef, useState } from "react";
+import { Link, NavLink, useMatch } from "react-router-dom";
 import styles from "./AppHeader.module.css";
 
 // функциональный компонент, отображающий шапку приложения
@@ -50,14 +50,16 @@ const AppHeader = () => {
     }
   };
 
+  // возвращает данные соответствия о маршруте по заданному пути относительно текущего местоположения.
+  const homeLink = useMatch("/");
+  const profileLink = useMatch("/profile");
+  const orderFeedLink = useMatch("/orders");
+
   // возвращает разметку, содержащую - логотип, навигацию по секции
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
-        <Logo />
-      </div>
-      <nav className="pb-4 pt-4">
-        <ul className={`${styles.list} pb-4 pt-4`}>
+      <nav className={styles.nav}>
+        <ul className={styles.menu}>
           <li
             className={`${styles.item} ${
               currentSection === section.burgerConstructor.type
@@ -67,22 +69,22 @@ const AppHeader = () => {
             ref={sectionRefs[section.burgerConstructor.type]}
             onClick={() => selectSection(section.burgerConstructor.type)}
           >
-            <BurgerIcon
-              type={
-                currentSection === section.burgerConstructor.type
-                  ? "primary"
-                  : "secondary"
-              }
-            />
-            <p
-              className={
-                currentSection === section.burgerConstructor.type
-                  ? "text text_type_main-default pl-2"
-                  : "text text_type_main-default pl-2 text_color_inactive"
-              }
-            >
-              {section.burgerConstructor.name}
-            </p>
+            <NavLink to="/" className={styles.link}>
+              {homeLink ? (
+                <BurgerIcon type={"primary"} />
+              ) : (
+                <BurgerIcon type={"secondary"} />
+              )}
+              {homeLink ? (
+                <p className="text text_type_main-default pl-2">
+                  {section.burgerConstructor.name}
+                </p>
+              ) : (
+                <p className="text text_type_main-default pl-2 text_color_inactive">
+                  {section.burgerConstructor.name}
+                </p>
+              )}
+            </NavLink>
           </li>
           <li
             className={`${styles.item} ${
@@ -93,23 +95,28 @@ const AppHeader = () => {
             ref={sectionRefs[section.orderFeed.type]}
             onClick={() => selectSection(section.orderFeed.type)}
           >
-            <ListIcon
-              type={
-                currentSection === section.orderFeed.type
-                  ? "primary"
-                  : "secondary"
-              }
-            />
-            <p
-              className={
-                currentSection === section.orderFeed.type
-                  ? "text text_type_main-default pl-2"
-                  : "text text_type_main-default pl-2 text_color_inactive"
-              }
-            >
-              {section.orderFeed.name}
-            </p>
+            <NavLink to="/orders" className={styles.link}>
+              {orderFeedLink ? (
+                <ListIcon type={"primary"} />
+              ) : (
+                <ListIcon type={"secondary"} />
+              )}
+              {orderFeedLink ? (
+                <p className="text text_type_main-default pl-2">
+                  {section.orderFeed.name}
+                </p>
+              ) : (
+                <p className="text text_type_main-default pl-2 text_color_inactive">
+                  {section.orderFeed.name}
+                </p>
+              )}
+            </NavLink>
           </li>
+        </ul>
+        <Link className={styles.logo} to="/">
+          <Logo />
+        </Link>
+        <ul className={styles.menu_right}>
           <li
             className={`${styles.item} ${
               currentSection === section.profile.type
@@ -119,22 +126,22 @@ const AppHeader = () => {
             ref={sectionRefs[section.profile.type]}
             onClick={() => selectSection(section.profile.type)}
           >
-            <ProfileIcon
-              type={
-                currentSection === section.profile.type
-                  ? "primary"
-                  : "secondary"
-              }
-            />
-            <p
-              className={
-                currentSection === section.profile.type
-                  ? "text text_type_main-default pl-2 pr-5"
-                  : "text text_type_main-default pl-2 pr-5 text_color_inactive"
-              }
-            >
-              {section.profile.name}
-            </p>
+            <NavLink to="/profile" className={styles.link}>
+              {profileLink ? (
+                <ListIcon type={"primary"} />
+              ) : (
+                <ListIcon type={"secondary"} />
+              )}
+              {profileLink ? (
+                <p className="text text_type_main-default pl-2">
+                  {section.profile.name}
+                </p>
+              ) : (
+                <p className="text text_type_main-default pl-2 text_color_inactive">
+                  {section.profile.name}
+                </p>
+              )}
+            </NavLink>
           </li>
         </ul>
       </nav>
