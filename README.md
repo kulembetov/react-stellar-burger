@@ -11,6 +11,7 @@
 * [Чеклист №1](https://code.s3.yandex.net/web-plus/checklists/checklist_pdf/checklist_7.pdf)
 * [Чеклист №2](https://code.s3.yandex.net/web-plus/checklists/checklist_pdf/checklist_8.pdf)
 * [Чеклист №3](https://code.s3.yandex.net/web-plus/checklists/checklist_pdf/checklist_9-1.pdf)
+* [Чеклист №4](https://code.s3.yandex.net/web-plus/checklists/checklist_pdf/checklist_9-2.pdf)
 
 ## Стек технологий
 * HTML5

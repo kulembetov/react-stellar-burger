@@ -12,7 +12,7 @@ const BurgerIngredient = ({ ingredient, moveIngredientItem }) => {
   const { ingredients } = useSelector((state) => state.burgerConstructor);
 
   // определяет использование уникального ключа при добавлении в конструктор
-  const id = ingredient.key;
+  const id = ingredient.keyUuid;
 
   // определение индекса ингредиента
   const index = ingredients.indexOf(ingredient);
@@ -24,7 +24,7 @@ const BurgerIngredient = ({ ingredient, moveIngredientItem }) => {
   const onDelete = () => {
     return dispatch({
       type: DELETE_INGREDIENTS_CONSTRUCTOR,
-      key: ingredient.key,
+      keyUuid: ingredient.keyUuid,
     });
   };
 

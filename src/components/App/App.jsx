@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import IngredientDetails from "../../components/IngredientDetails/IngredientDetails";
@@ -7,7 +7,9 @@ import Home from "../../pages/home/home";
 import Ingredient from "../../pages/ingredient/ingredient";
 import Login from "../../pages/login/login";
 import NotFound from "../../pages/not-found/not-found";
+import OrderDetails from "../../pages/order-details/order-details";
 import OrderFeed from "../../pages/order-feed/order-feed";
+import ProfileOrderDetails from "../../pages/profile-order-details/profile-order-details";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
 import Profile from "../../pages/profile/profile";
 import {
@@ -24,25 +26,21 @@ import {
   login,
   notFound,
   orderFeed,
-  ordersInProfile,
+  orderId,
   profile,
+  profileOrder,
+  profileOrderId,
   register,
   resetPassword,
 } from "../../utils/routes";
 import AppHeader from "../AppHeader/AppHeader";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
-import Loader from "../Loader/Loader";
 import Modal from "../Modal/Modal";
+import OrderInfo from "../OrderInfo/OrderInfo";
 import styles from "./App.module.css";
 
 // функциональный компонент, отображающий приложение
 export const App = () => {
-  // определяет состояние загрузки
-  const [isLoading, setIsLoading] = useState(true);
-
-  // определяет состояние для отображения ошибок
-  const [error] = useState(null);
-
   // определяет методы
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -51,20 +49,12 @@ export const App = () => {
   // фоновый роутинг для модального окна
   const background = location.state && location.state.background;
 
-  // повторное отображение страницы ингредиентов
+  // получение данных
   useEffect(() => {
-    // установка лоадера перед получением данных
-    setIsLoading(true);
-
-    // получение данных и аутентификация
     dispatch(getData());
     dispatch(authentication());
-
-    // убирает лоадер при успешном получении данных
-    setIsLoading(false);
   }, [dispatch]);
 
-  // закрытие модального окна
   const closePopup = () => {
     navigate(-1);
   };
@@ -72,58 +62,73 @@ export const App = () => {
   // возвращает разметку, содержащую приложение
   return (
     <ErrorBoundary>
-      {error ? (
-        <div className={styles.error}>{error}</div>
-      ) : isLoading ? (
-        <Loader />
-      ) : (
-        <div className={styles.app}>
-          <AppHeader />
-          <Routes location={background || location}>
-            <Route path={home} element={<Home />} />
-            <Route path={ingredientsId} element={<Ingredient />} />
+      <div className={styles.app}>
+        <AppHeader />
+        <Routes location={background || location}>
+          <Route path={home} element={<Home />} />
+          <Route path={ingredientsId} element={<Ingredient />} />
+          <Route
+            path={login}
+            element={<OnlyUnAuthorized component={<Login />} />}
+          />
+          <Route
+            path={profile}
+            element={<OnlyAuthorized component={<Profile />} />}
+          >
             <Route
-              path={login}
-              element={<OnlyUnAuthorized component={<Login />} />}
+              path={profileOrder}
+              element={<OnlyAuthorized component={<ProfileOrders />} />}
+            />
+          </Route>
+          <Route
+            path={profileOrderId}
+            element={<OnlyAuthorized component={<ProfileOrderDetails />} />}
+          />
+          <Route
+            path={register}
+            element={<OnlyUnAuthorized component={<Register />} />}
+          />
+          <Route
+            path={forgotPassword}
+            element={<OnlyUnAuthorized component={<ForgotPassword />} />}
+          />
+          <Route
+            path={resetPassword}
+            element={<OnlyUnAuthorized component={<ResetPassword />} />}
+          />
+          <Route path={orderFeed} element={<OrderFeed />} />
+          <Route path={orderId} element={<OrderDetails />} />
+          <Route path={notFound} element={<NotFound />} />
+        </Routes>
+        {background && (
+          <Routes>
+            <Route
+              path={ingredientsId}
+              element={
+                <Modal onClose={closePopup} title="Детали ингредиента">
+                  <IngredientDetails />
+                </Modal>
+              }
             />
             <Route
-              path={profile}
-              element={<OnlyAuthorized component={<Profile />} />}
-            >
-              <Route
-                path={ordersInProfile}
-                element={<OnlyAuthorized component={<ProfileOrders />} />}
-              />
-            </Route>
-            <Route
-              path={register}
-              element={<OnlyUnAuthorized component={<Register />} />}
+              path={orderId}
+              element={
+                <Modal onClose={closePopup}>
+                  <OrderInfo />
+                </Modal>
+              }
             />
             <Route
-              path={forgotPassword}
-              element={<OnlyUnAuthorized component={<ForgotPassword />} />}
+              path={profileOrderId}
+              element={
+                <Modal onClose={closePopup}>
+                  <OrderInfo />
+                </Modal>
+              }
             />
-            <Route
-              path={resetPassword}
-              element={<OnlyUnAuthorized component={<ResetPassword />} />}
-            />
-            <Route path={orderFeed} element={<OrderFeed />} />
-            <Route path={notFound} element={<NotFound />} />
           </Routes>
-          {background && (
-            <Routes>
-              <Route
-                path={ingredientsId}
-                element={
-                  <Modal onClose={closePopup} title="Детали ингредиента">
-                    <IngredientDetails />
-                  </Modal>
-                }
-              />
-            </Routes>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </ErrorBoundary>
   );
 };

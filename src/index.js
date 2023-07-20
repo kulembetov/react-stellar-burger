@@ -1,30 +1,25 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { applyMiddleware, compose, createStore } from "redux";
+import { BrowserRouter as Router } from "react-router-dom";
+import { applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { App } from "./components/App/App";
 import "./index.css";
-import { rootReducer } from "./services/reducers/root";
-import { BrowserRouter as Router } from "react-router-dom";
+import { initialStore } from "./services/store";
 
 const composeEnhancers =
-  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+  process.env.NODE_ENV === "development"
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
     : compose;
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-const store = createStore(rootReducer, enhancer);
-
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <Router>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Router>
-  </React.StrictMode>
+  <Router>
+    <Provider store={initialStore}>
+      <App />
+    </Provider>
+  </Router>
 );

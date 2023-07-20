@@ -46,6 +46,25 @@ export const getOrderData = (ingredients) => {
   });
 };
 
+// отправка заказа с токеном
+export const postOrder = (ingredients) => {
+  return request("orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("accessToken"),
+    },
+    body: JSON.stringify({
+      ingredients,
+    }),
+  });
+};
+
+// получение данных о заказе по его номеру
+export const getOrdersFetch = (number) => {
+  return request(`orders/${number}`);
+};
+
 // получение данных пользователя
 export const getUser = () => {
   return requestWithRefresh(USER_KEY, {
@@ -95,7 +114,7 @@ export const requestWithRefresh = async (endpoint, options) => {
         localStorage.getItem("refreshToken")
       );
       if (!refreshData.success) {
-        throw new Error("Проблема с загрузкой refresh token");
+        throw new Error("Проблема с загрузкой refresh токена");
       }
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);

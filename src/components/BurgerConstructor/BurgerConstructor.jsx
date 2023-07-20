@@ -7,7 +7,6 @@ import React, { useCallback, useMemo } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import {
   addIngredientsConstructor,
   addIngredientsConstructorBun,
@@ -32,26 +31,30 @@ const button = {
 // функциональный компонент, отображающий состав и общую стоимость бургера
 const BurgerConstructor = () => {
   // получение состояния булки и ингредиентов из Redux хранилища
-  const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
+  const { bun, ingredients } = useSelector(
+    (state) => state.rootReducer.burgerConstructor
+  );
 
   // определяет состояние отображения модального окна с информацией об ингредиенте
-  const { isOpenOrder } = useSelector((state) => state.orderDetails);
+  const { isOpenOrder } = useSelector(
+    (state) => state.rootReducer.orderDetails
+  );
 
   // получение методов
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // получение пользователя из Redux хранилища
-  const { user } = useSelector((state) => state.userReducer);
+  const { user } = useSelector((state) => state.rootReducer.user);
 
   // обработка добавления ингредиента
   const onDropHandler = useCallback(
-    (item) => {
+    (item, keyUuid) => {
       const { type } = item;
       if (type === "bun") {
         dispatch(addIngredientsConstructorBun(item));
       } else {
-        dispatch(addIngredientsConstructor(item, uuidv4()));
+        dispatch(addIngredientsConstructor(item, keyUuid));
       }
     },
     [dispatch]
@@ -74,20 +77,20 @@ const BurgerConstructor = () => {
     [dispatch]
   );
   // поиск соусов и начинки в списке ингредиентов
-  const saucesAndMains = useMemo(
+  const saucesAndFillings = useMemo(
     () => ingredients.filter((m) => m.type !== "bun"),
     [ingredients]
   );
 
   // вычисляет общую стоимость бургера
   const totalPrice = useMemo(() => {
-    const priceIngredients = saucesAndMains.reduce(
+    const priceIngredients = saucesAndFillings.reduce(
       (acc, item) => acc + item.price,
       0
     );
     const bunPrice = bun ? 2 * bun.price : 0;
     return priceIngredients + bunPrice;
-  }, [saucesAndMains, bun]);
+  }, [saucesAndFillings, bun]);
 
   // получение списка идентификаторов ингредиентов для заказа
   const orderIngredients = useMemo(
@@ -97,13 +100,13 @@ const BurgerConstructor = () => {
 
   // обработчик открытия модального окна
   const handleOpenModal = useCallback(() => {
-    if (user === null) {
+    if (!user) {
       navigate("/login", { replace: true });
+    } else {
+      dispatch(openOrderDetailsModal());
+      const allIngredients = [...orderIngredients, bun._id];
+      dispatch(postOrder(allIngredients));
     }
-
-    dispatch(openOrderDetailsModal());
-    const allIngredients = [...orderIngredients, bun._id];
-    dispatch(postOrder(allIngredients));
   }, [dispatch, orderIngredients, bun]);
 
   // обработчик закрытия модального окна

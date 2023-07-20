@@ -15,8 +15,8 @@ const text = {
 // функциональный компонент, отображающий информацию о заказе
 const OrderDetails = () => {
   // получение состояния о заказе из Redux хранилища
-  const { orderRequest, orderFailed, orderCurrent } = useSelector(
-    (state) => state.orderDetails
+  const { orderCurrent, orderRequest, orderFailed } = useSelector(
+    (state) => state.rootReducer.orderDetails
   );
 
   // возвращает разметку, которая содержит информацию о заказе, такую как идентификатор, статус готовности заказа и текстовую информацию
@@ -28,7 +28,7 @@ const OrderDetails = () => {
         <ul className={`${styles.list} m-4 pb-15`}>
           <li className={`${styles.item} pb-15`}>
             <p className={`${styles.number} text text_type_digits-large pb-4`}>
-              {orderCurrent.order.number}
+              {orderCurrent}
             </p>
             <p className="text text_type_main-medium pt-4">{text.orderText}</p>
           </li>

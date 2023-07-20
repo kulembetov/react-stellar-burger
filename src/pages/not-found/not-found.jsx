@@ -33,7 +33,7 @@ const NotFound = () => {
           {text.message}
         </p>
       </div>
-      <Button type="primary" onClick={handleHomeClick}>
+      <Button htmlType="button" type="primary" onClick={handleHomeClick}>
         {text.button}
       </Button>
     </div>

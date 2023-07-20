@@ -43,7 +43,7 @@ const BurgerIngredients = () => {
     burgerIngredients,
     burgerIngredientsRequest,
     burgerIngredientsFailed,
-  } = useSelector((state) => state.burgerIngredients);
+  } = useSelector((state) => state.rootReducer.ingredients);
 
   // получение метода
   const dispatch = useDispatch();
@@ -111,7 +111,7 @@ const BurgerIngredients = () => {
     root: rootRef.current,
   });
 
-  // обработка открытия модального окна
+  // обработка открытия модального окна ингредиента
   const handleOpenModalIngredient = (item) => {
     dispatch(openIngredientDetailsModal());
     dispatch(setTabIngredient(item));

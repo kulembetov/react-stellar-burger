@@ -10,7 +10,11 @@ class ErrorBoundary extends Component {
 
   // вызывается, когда происходит ошибка в дочернем компоненте
   componentDidCatch(error, errorInfo) {
-    // выводит сообщение в консоль об ошибке и устанавливает состояние
+    // выводит сообщение в консоль об ошибке с настроенным стилем
+    console.error(
+      "%cПроизошла ошибка. Информация об ошибке ниже.",
+      "background: red; color: white; font-size: 18px; padding: 4px;"
+    );
     console.error(error, errorInfo);
     this.setState({ hasError: true });
   }

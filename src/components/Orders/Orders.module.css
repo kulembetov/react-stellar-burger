@@ -1,0 +1,62 @@
+.box {
+  max-width: 580px;
+  display: grid;
+  gap: 60px 36px;
+  height: 626px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 36px;
+  justify-content: space-between;
+  margin: 0;
+}
+
+.list {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.list:nth-child(2) {
+  grid-column-start: 2;
+}
+
+.numbers {
+  max-height: 152px;
+  max-width: 242px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style-type: none;
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
+}
+
+.number {
+  color: #00cccc;
+}
+
+.large {
+  margin: 0;
+  filter: drop-shadow(0 4px 32px rgba(51, 51, 255, 0.5))
+    drop-shadow(0 0 8px rgba(51, 51, 255, 0.25))
+    drop-shadow(0 0 16px rgba(51, 51, 255, 0.25));
+}
+
+.full {
+  max-width: 100%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.today {
+  max-width: 100%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}

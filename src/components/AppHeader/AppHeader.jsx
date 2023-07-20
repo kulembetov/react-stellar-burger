@@ -10,7 +10,7 @@ import styles from "./AppHeader.module.css";
 // функциональный компонент, отображающий шапку приложения
 const AppHeader = () => {
   // определяет текущую секцию, изначально выбранная секция - конструктор бургеров
-  const [currentSection, setCurrentSection] = useState("burger-constructor");
+  const [currentSection, setCurrentSection] = useState("");
 
   // определяет секции
   const section = {
@@ -52,8 +52,8 @@ const AppHeader = () => {
 
   // возвращает данные соответствия о маршруте по заданному пути относительно текущего местоположения.
   const homeLink = useMatch("/");
+  const orderFeedLink = useMatch("/feed");
   const profileLink = useMatch("/profile");
-  const orderFeedLink = useMatch("/orders");
 
   // возвращает разметку, содержащую - логотип, навигацию по секции
   return (
@@ -69,7 +69,14 @@ const AppHeader = () => {
             ref={sectionRefs[section.burgerConstructor.type]}
             onClick={() => selectSection(section.burgerConstructor.type)}
           >
-            <NavLink to="/" className={styles.link}>
+            <NavLink
+              to="/"
+              className={`${styles.link} ${
+                currentSection === section.burgerConstructor.type
+                  ? styles.disabled
+                  : ""
+              }`}
+            >
               {homeLink ? (
                 <BurgerIcon type={"primary"} />
               ) : (
@@ -87,19 +94,20 @@ const AppHeader = () => {
             </NavLink>
           </li>
           <li
-            className={`${styles.item} ${
-              currentSection === section.orderFeed.type
-                ? `${styles.disabled}`
-                : ""
-            } pl-5`}
+            className={`${styles.item} pl-5`}
             ref={sectionRefs[section.orderFeed.type]}
             onClick={() => selectSection(section.orderFeed.type)}
           >
-            <NavLink to="/orders" className={styles.link}>
+            <NavLink
+              to="/feed"
+              className={`${styles.link} ${
+                currentSection === section.orderFeed.type ? styles.disabled : ""
+              }`}
+            >
               {orderFeedLink ? (
-                <ListIcon type={"primary"} />
+                <ListIcon type="primary" />
               ) : (
-                <ListIcon type={"secondary"} />
+                <ListIcon type="secondary" />
               )}
               {orderFeedLink ? (
                 <p className="text text_type_main-default pl-2">
@@ -126,7 +134,12 @@ const AppHeader = () => {
             ref={sectionRefs[section.profile.type]}
             onClick={() => selectSection(section.profile.type)}
           >
-            <NavLink to="/profile" className={styles.link}>
+            <NavLink
+              to="/profile"
+              className={`${styles.link} ${
+                currentSection === section.profile.type ? styles.disabled : ""
+              }`}
+            >
               {profileLink ? (
                 <ListIcon type={"primary"} />
               ) : (
