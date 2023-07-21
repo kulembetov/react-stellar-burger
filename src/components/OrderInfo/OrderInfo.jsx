@@ -1,5 +1,5 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getOrder } from "../../services/actions/actions";
@@ -12,6 +12,9 @@ const text = {
   ingredients: "Состав:",
   hashtag: "#",
   multiply: " x ",
+  done: "Готов",
+  created: "Создан",
+  pending: "Готовится",
 };
 
 // отображает компонент, отображающий информацию об ингредиенте
@@ -51,13 +54,15 @@ const OrderInfo = () => {
     : [];
 
   // расчёт общей стоимости заказа
-  const totalPrice = burgerIngredientsImages?.reduce((acc, item) => {
-    return (
-      acc +
-      (item?.type !== "bun" ? item?.price : 0) +
-      (item?.type === "bun" ? 2 * item?.price : 0)
-    );
-  }, 0);
+  const totalPrice = useMemo(() => {
+    return burgerIngredientsImages?.reduce((acc, item) => {
+      return (
+        acc +
+        (item?.type !== "bun" ? item?.price : 0) +
+        (item?.type === "bun" ? 2 * item?.price : 0)
+      );
+    }, 0);
+  }, [burgerIngredientsImages]);
 
   // подсчёт количества ингредиентов в заказе
   const getIngredientCount = (ingredient) => {
@@ -82,11 +87,11 @@ const OrderInfo = () => {
   const getStatusText = () => {
     switch (order.status) {
       case "done":
-        return "Выполнен";
+        return text.done;
       case "created":
-        return "Создан";
+        return text.created;
       case "pending":
-        return "Готовится";
+        return text.pending;
       default:
         return "";
     }
@@ -139,7 +144,6 @@ const OrderInfo = () => {
                           <img
                             src={findIngredient(ingredient)?.image_mobile}
                             alt=""
-                            className={`${styles.image}`}
                           />
                         </div>
                         <p

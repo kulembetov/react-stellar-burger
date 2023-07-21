@@ -28,4 +28,5 @@
   width: 100%;
   background-color: var(--background);
   border-radius: 40px;
+  text-decoration: none;
 }

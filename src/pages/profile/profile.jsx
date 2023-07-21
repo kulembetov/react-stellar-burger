@@ -87,17 +87,19 @@ const Profile = () => {
   // проверяет валидность формы
   const isFormValid = () => {
     return (
-      values.name.length >= 2 ||
-      values.email.length >= 3 ||
-      isValidEmail(values.email) ||
-      values.password.length >= 6
+      (values.name.length >= 2 || values.name.trim() === "") &&
+      (values.email.length >= 3 || values.email.trim() === "") &&
+      (isValidEmail(values.email) || values.email.trim() === "") &&
+      (values.password.length >= 6 || values.password.trim() === "")
     );
   };
 
   // обработчик события для отправки формы
   const handleClickSubmit = (evt) => {
     evt.preventDefault();
-    if (isFormValid()) {
+    if (!values.password || values.password.trim() === "") {
+      setErrors((prevErrors) => ({ ...prevErrors, password: true }));
+    } else if (isFormValid()) {
       dispatch(patchUserFetch(values));
       setIsSaved(true);
       setIsNameEditing(false);
@@ -177,12 +179,12 @@ const Profile = () => {
   }, [setValues]);
 
   useEffect(() => {
-    // Simulate the loader for 3 seconds
+    // симуляция лоадера
     const loaderTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
 
-    // Clean up the timeout to avoid memory leaks
+    // очистка
     return () => clearTimeout(loaderTimeout);
   }, []);
 

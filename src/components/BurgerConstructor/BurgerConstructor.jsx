@@ -15,7 +15,7 @@ import {
   closeOrderDetailsModal,
   moveIngredient,
   openOrderDetailsModal,
-  postOrder,
+  postOrderFetch,
 } from "../../services/actions/actions";
 import BurgerIngredient from "../BurgerIngredient/BurgerIngredient";
 import Modal from "../Modal/Modal";
@@ -25,33 +25,34 @@ import styles from "./BurgerConstructor.module.css";
 
 // определяет кнопки
 const button = {
-  placeOrder: "Оформить заказ",
+  order: "Оформить заказ",
+  process: "В очереди",
 };
 
 // функциональный компонент, отображающий состав и общую стоимость бургера
 const BurgerConstructor = () => {
-  // получение состояния булки и ингредиентов из Redux хранилища
+  // получение состояния булки и ингредиентов из хранилища Redux
   const { bun, ingredients } = useSelector(
     (state) => state.rootReducer.burgerConstructor
   );
 
   // определяет состояние отображения модального окна с информацией об ингредиенте
-  const { isOpenOrder } = useSelector(
+  const { orderRequest, isOpenOrder } = useSelector(
     (state) => state.rootReducer.orderDetails
   );
+
+  const { user } = useSelector((state) => state.rootReducer.user);
 
   // получение методов
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // получение пользователя из Redux хранилища
-  const { user } = useSelector((state) => state.rootReducer.user);
+  const buttonText = orderRequest ? button.process : button.order;
 
   // обработка добавления ингредиента
   const onDropHandler = useCallback(
     (item, keyUuid) => {
-      const { type } = item;
-      if (type === "bun") {
+      if (item.type === "bun") {
         dispatch(addIngredientsConstructorBun(item));
       } else {
         dispatch(addIngredientsConstructor(item, keyUuid));
@@ -63,12 +64,16 @@ const BurgerConstructor = () => {
   // определение области дропа
   const [{ isActive }, drop] = useDrop({
     accept: "ingredient",
-    drop: onDropHandler,
+    drop: (item, monitor) => {
+      if (monitor.didDrop()) {
+        return;
+      }
+      onDropHandler(item, monitor.getItem().keyUuid);
+    },
     collect: (monitor) => ({
       isActive: monitor.canDrop() && monitor.isOver(),
     }),
   });
-
   // перемещение ингредиентов
   const moveIngredientItem = useCallback(
     (dragIndex, hoverIndex) => {
@@ -77,20 +82,20 @@ const BurgerConstructor = () => {
     [dispatch]
   );
   // поиск соусов и начинки в списке ингредиентов
-  const saucesAndFillings = useMemo(
+  const saucesAndMains = useMemo(
     () => ingredients.filter((m) => m.type !== "bun"),
     [ingredients]
   );
 
   // вычисляет общую стоимость бургера
   const totalPrice = useMemo(() => {
-    const priceIngredients = saucesAndFillings.reduce(
+    const priceIngredients = saucesAndMains.reduce(
       (acc, item) => acc + item.price,
       0
     );
     const bunPrice = bun ? 2 * bun.price : 0;
     return priceIngredients + bunPrice;
-  }, [saucesAndFillings, bun]);
+  }, [saucesAndMains, bun]);
 
   // получение списка идентификаторов ингредиентов для заказа
   const orderIngredients = useMemo(
@@ -99,27 +104,34 @@ const BurgerConstructor = () => {
   );
 
   // обработчик открытия модального окна
-  const handleOpenModal = useCallback(() => {
+  const handleOpenModal = () => {
     if (!user) {
       navigate("/login", { replace: true });
     } else {
       dispatch(openOrderDetailsModal());
       const allIngredients = [...orderIngredients, bun._id];
-      dispatch(postOrder(allIngredients));
+      dispatch(postOrderFetch(allIngredients));
     }
-  }, [dispatch, orderIngredients, bun]);
+  };
 
   // обработчик закрытия модального окна
   const handleCloseModal = useCallback(() => {
-    dispatch(closeOrderDetailsModal());
-    dispatch(clearIngredientsConstructor());
-    dispatch(clearIngredientsConstructorBun());
-  }, [dispatch]);
+    if (isOpenOrder) {
+      dispatch(clearIngredientsConstructor());
+      dispatch(clearIngredientsConstructorBun());
+      dispatch(closeOrderDetailsModal());
+    }
+  }, [dispatch, isOpenOrder]);
 
   // возвращает разметку, содержащую два блока -  список ингредиентов с булками вверху и внизу, а также блок с общей стоимостью и кнопкой оформления заказа
   return (
     <div>
-      <div className={`${styles.ingredient} pl-4 pb-5`} ref={drop}>
+      <div
+        className={`${bun === null ? styles.empty : ""} ${
+          isActive ? styles.active : ""
+        }`}
+        ref={drop}
+      >
         {bun && (
           <ConstructorElement
             type="top"
@@ -132,7 +144,7 @@ const BurgerConstructor = () => {
         )}
         <ul className={`${styles.list} pt-5`}>
           {ingredients.map((item) => (
-            <li key={item.key} className={`${styles.item} pb-4`}>
+            <li key={item.keyUuid} className={`${styles.item} pb-4`}>
               <DragIcon type="primary" />
               <BurgerIngredient
                 ingredient={item}
@@ -140,11 +152,6 @@ const BurgerConstructor = () => {
               />
             </li>
           ))}
-          {!bun && (
-            <p className={`text text_type_main-medium ${styles.tip}`}>
-              Пожалуйста, перенесите сюда булку для создания заказа
-            </p>
-          )}
         </ul>
         {bun && (
           <ConstructorElement
@@ -168,7 +175,7 @@ const BurgerConstructor = () => {
             disabled={!bun}
             onClick={handleOpenModal}
           >
-            {button.placeOrder}
+            {buttonText}
           </Button>
         </div>
       </div>

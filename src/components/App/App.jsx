@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import IngredientDetails from "../../components/IngredientDetails/IngredientDetails";
@@ -62,73 +64,75 @@ export const App = () => {
   // возвращает разметку, содержащую приложение
   return (
     <ErrorBoundary>
-      <div className={styles.app}>
-        <AppHeader />
-        <Routes location={background || location}>
-          <Route path={home} element={<Home />} />
-          <Route path={ingredientsId} element={<Ingredient />} />
-          <Route
-            path={login}
-            element={<OnlyUnAuthorized component={<Login />} />}
-          />
-          <Route
-            path={profile}
-            element={<OnlyAuthorized component={<Profile />} />}
-          >
+      <DndProvider backend={HTML5Backend}>
+        <div className={styles.app}>
+          <AppHeader />
+          <Routes location={background || location}>
+            <Route path={home} element={<Home />} />
+            <Route path={ingredientsId} element={<Ingredient />} />
             <Route
-              path={profileOrder}
-              element={<OnlyAuthorized component={<ProfileOrders />} />}
-            />
-          </Route>
-          <Route
-            path={profileOrderId}
-            element={<OnlyAuthorized component={<ProfileOrderDetails />} />}
-          />
-          <Route
-            path={register}
-            element={<OnlyUnAuthorized component={<Register />} />}
-          />
-          <Route
-            path={forgotPassword}
-            element={<OnlyUnAuthorized component={<ForgotPassword />} />}
-          />
-          <Route
-            path={resetPassword}
-            element={<OnlyUnAuthorized component={<ResetPassword />} />}
-          />
-          <Route path={orderFeed} element={<OrderFeed />} />
-          <Route path={orderId} element={<OrderDetails />} />
-          <Route path={notFound} element={<NotFound />} />
-        </Routes>
-        {background && (
-          <Routes>
-            <Route
-              path={ingredientsId}
-              element={
-                <Modal onClose={closePopup} title="Детали ингредиента">
-                  <IngredientDetails />
-                </Modal>
-              }
+              path={login}
+              element={<OnlyUnAuthorized component={<Login />} />}
             />
             <Route
-              path={orderId}
-              element={
-                <Modal onClose={closePopup}>
-                  <OrderInfo />
-                </Modal>
-              }
-            />
+              path={profile}
+              element={<OnlyAuthorized component={<Profile />} />}
+            >
+              <Route
+                path={profileOrder}
+                element={<OnlyAuthorized component={<ProfileOrders />} />}
+              />
+            </Route>
             <Route
               path={profileOrderId}
-              element={
-                <Modal onClose={closePopup}>
-                  <OrderInfo />
-                </Modal>
-              }
+              element={<OnlyAuthorized component={<ProfileOrderDetails />} />}
             />
+            <Route
+              path={register}
+              element={<OnlyUnAuthorized component={<Register />} />}
+            />
+            <Route
+              path={forgotPassword}
+              element={<OnlyUnAuthorized component={<ForgotPassword />} />}
+            />
+            <Route
+              path={resetPassword}
+              element={<OnlyUnAuthorized component={<ResetPassword />} />}
+            />
+            <Route path={orderFeed} element={<OrderFeed />} />
+            <Route path={orderId} element={<OrderDetails />} />
+            <Route path={notFound} element={<NotFound />} />
           </Routes>
-        )}
-      </div>
+          {background && (
+            <Routes>
+              <Route
+                path={ingredientsId}
+                element={
+                  <Modal onClose={closePopup} title="Детали ингредиента">
+                    <IngredientDetails />
+                  </Modal>
+                }
+              />
+              <Route
+                path={orderId}
+                element={
+                  <Modal onClose={closePopup}>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+              <Route
+                path={profileOrderId}
+                element={
+                  <Modal onClose={closePopup}>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+            </Routes>
+          )}
+        </div>
+      </DndProvider>
     </ErrorBoundary>
   );
 };

@@ -24,6 +24,16 @@ const AppHeader = () => {
       type: "order-feed",
       ref: useRef(null),
     },
+    orderHistory: {
+      name: "История заказов",
+      type: "order-history",
+      ref: useRef(null),
+    },
+    logOut: {
+      name: "Выход",
+      type: "log-out",
+      ref: useRef(null),
+    },
     profile: {
       name: "Личный кабинет",
       type: "profile",
@@ -54,6 +64,8 @@ const AppHeader = () => {
   const homeLink = useMatch("/");
   const orderFeedLink = useMatch("/feed");
   const profileLink = useMatch("/profile");
+  const profileOrdersLink = useMatch("/profile/orders");
+  const logOutLink = useMatch("/logout");
 
   // возвращает разметку, содержащую - логотип, навигацию по секции
   return (
@@ -137,15 +149,18 @@ const AppHeader = () => {
             <NavLink
               to="/profile"
               className={`${styles.link} ${
-                currentSection === section.profile.type ? styles.disabled : ""
+                currentSection ===
+                (section.profile.type || section.orderHistory || section.logOut)
+                  ? styles.disabled
+                  : ""
               }`}
             >
-              {profileLink ? (
+              {(profileLink || profileOrdersLink || logOutLink) ? (
                 <ListIcon type={"primary"} />
               ) : (
                 <ListIcon type={"secondary"} />
               )}
-              {profileLink ? (
+              {(profileLink || profileOrdersLink || logOutLink) ? (
                 <p className="text text_type_main-default pl-2">
                   {section.profile.name}
                 </p>

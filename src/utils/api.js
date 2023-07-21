@@ -48,7 +48,7 @@ export const getOrderData = (ingredients) => {
 
 // отправка заказа с токеном
 export const postOrder = (ingredients) => {
-  return request("orders", {
+  return request(ORDERS_KEY, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -110,19 +110,17 @@ export const requestWithRefresh = async (endpoint, options) => {
     return await checkResponse(res);
   } catch (err) {
     if (err.message === "jwt expired") {
-      const refreshData = await refreshToken(
-        localStorage.getItem("refreshToken")
-      );
+      const refreshData = await refreshToken();
       if (!refreshData.success) {
-        throw new Error("Проблема с загрузкой refresh токена");
+        return Promise.reject(refreshData);
       }
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);
       options.headers.authorization = refreshData.accessToken;
-      const res = await fetch(`${BASE_URL}${endpoint}`, options);
+      const res = await fetch(`${BASE_URL}${endpoint}`, options); //повторяем запрос
       return await checkResponse(res);
     } else {
-      throw err;
+      return Promise.reject(err);
     }
   }
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { openOrderDetailsModal } from "../../services/actions/actions";
-import FeedItem from "../FeedItem/FeedItem.module.css";
+import FeedItem from "../FeedItem/FeedItem";
 import styles from "./FeedProfile.module.css";
 
 // функциональный компонент, отображающий заказ
@@ -23,8 +23,8 @@ const FeedProfile = ({ orders }) => {
         {orders
           ? orders.map((order) => (
               <Link
-                key={order.number}
                 className={`${styles.item} pb-5`}
+                key={order.number}
                 to={`/profile/orders/${order.number}`}
                 state={{ background: location }}
               >

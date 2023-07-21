@@ -63,7 +63,7 @@ const Orders = () => {
                     (order, index) =>
                       order.status === "done" && (
                         <li
-                          className={`${styles.number} text text_type_digits-default`}
+                          className={`${styles.success} text text_type_digits-default`}
                           key={index}
                         >
                           {order.number}
@@ -77,22 +77,22 @@ const Orders = () => {
             <h3 className={`${styles.title} text text_type_main-medium`}>
               {text.process}
             </h3>
+            <ul className={`${styles.numbers}`}>
+              {statusArray
+                ? statusArray.pending.map(
+                    (order, index) =>
+                      order.status === "pending" && (
+                        <li
+                          className={`${styles.pending} text text_type_digits-default`}
+                          key={index}
+                        >
+                          {order.number}
+                        </li>
+                      )
+                  )
+                : null}
+            </ul>
           </div>
-          <ul className={`${styles.numbers}`}>
-            {statusArray
-              ? statusArray.pending.map(
-                  (order, key) =>
-                    order.status === "pending" && (
-                      <li
-                        className={`${styles.number} text text_type_digits-default`}
-                        key={key}
-                      >
-                        {order.number}
-                      </li>
-                    )
-                )
-              : null}
-          </ul>
         </div>
         <div className={`${styles.full}`}>
           <h3 className="text text_type_main-medium">{text.total}</h3>

@@ -1,15 +1,17 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
 import {
-  getData,
+  closeIngredientDetailsModal,
+  deleteTabIngredient,
   openIngredientDetailsModal,
   setTabIngredient,
 } from "../../services/actions/actions";
 import BurgerIngredientItem from "../BurgerIngredientItem/BurgerIngredientItem";
+import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Loader from "../Loader/Loader";
+import Modal from "../Modal/Modal";
 import styles from "./BurgerIngredients.module.css";
 
 // определяют типы ингредиентов для каждой категории
@@ -35,23 +37,19 @@ const title = {
 
 // функциональный компонент, отображающий ингредиенты для бургера в виде вкладок с категориями булок, соусов и начинок
 const BurgerIngredients = () => {
-  // определяет метод
-  const location = useLocation();
-
-  // определяет состояние ингредиентов из Redux хранилища
   const {
     burgerIngredients,
     burgerIngredientsRequest,
     burgerIngredientsFailed,
   } = useSelector((state) => state.rootReducer.ingredients);
 
+  // определяет состояние отображения модального окна с информацией об ингредиенте
+  const { isOpenIngredient } = useSelector(
+    (state) => state.rootReducer.ingredientDetails
+  );
+
   // получение метода
   const dispatch = useDispatch();
-
-  // первоначальная отрисовка ингредиентов
-  useEffect(() => {
-    dispatch(getData());
-  }, [dispatch]);
 
   // определяет текущую категорию ингредиентов, изначально выбранная категория - булки
   const [currentTab, setCurrentTab] = useState("buns");
@@ -111,10 +109,16 @@ const BurgerIngredients = () => {
     root: rootRef.current,
   });
 
-  // обработка открытия модального окна ингредиента
+  // обработка открытия модального окна
   const handleOpenModalIngredient = (item) => {
     dispatch(openIngredientDetailsModal());
     dispatch(setTabIngredient(item));
+  };
+
+  // обработка закрытия модального окна
+  const handleCloseModalIngredient = () => {
+    dispatch(closeIngredientDetailsModal());
+    dispatch(deleteTabIngredient());
   };
 
   // возвращает лоадер, если идёт отправка запроса или произошла ошибка
@@ -171,17 +175,12 @@ const BurgerIngredients = () => {
               </h2>
               <ul className={`${styles.list} pt-5`}>
                 {filteredBunIngredients.map((ingredient) => (
-                  <Link
-                    className={styles.link}
-                    key={ingredient._id}
-                    to={`/ingredients/${ingredient._id}`}
-                    state={{ background: location }}
-                  >
+                  <li key={ingredient._id}>
                     <BurgerIngredientItem
                       ingredient={ingredient}
                       onTab={handleOpenModalIngredient}
                     />
-                  </Link>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -194,17 +193,12 @@ const BurgerIngredients = () => {
               </h2>
               <ul className={`${styles.list} pt-5`}>
                 {filteredSauceIngredients.map((ingredient) => (
-                  <Link
-                    className={styles.link}
-                    key={ingredient._id}
-                    to={`/ingredients/${ingredient._id}`}
-                    state={{ background: location }}
-                  >
+                  <li key={ingredient._id}>
                     <BurgerIngredientItem
                       ingredient={ingredient}
                       onTab={handleOpenModalIngredient}
                     />
-                  </Link>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -217,22 +211,25 @@ const BurgerIngredients = () => {
               </h2>
               <ul className={`${styles.list} pt-5`}>
                 {filteredFillingIngredients.map((ingredient) => (
-                  <Link
-                    className={styles.link}
-                    key={ingredient._id}
-                    to={`/ingredients/${ingredient._id}`}
-                    state={{ background: location }}
-                  >
+                  <li key={ingredient._id}>
                     <BurgerIngredientItem
                       ingredient={ingredient}
                       onTab={handleOpenModalIngredient}
                     />
-                  </Link>
+                  </li>
                 ))}
               </ul>
             </div>
           </div>
         </div>
+        {isOpenIngredient && (
+          <Modal
+            onClose={handleCloseModalIngredient}
+            title="Детали ингредиента"
+          >
+            <IngredientDetails />
+          </Modal>
+        )}
       </>
     );
   }

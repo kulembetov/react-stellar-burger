@@ -1,5 +1,4 @@
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
 import { useSelector } from "react-redux";
 import { orderDetailsPropType } from "../../utils/prop-types";
 import Loader from "../Loader/Loader";
@@ -28,7 +27,7 @@ const OrderDetails = () => {
         <ul className={`${styles.list} m-4 pb-15`}>
           <li className={`${styles.item} pb-15`}>
             <p className={`${styles.number} text text_type_digits-large pb-4`}>
-              {orderCurrent}
+              {orderCurrent.order.number}
             </p>
             <p className="text text_type_main-medium pt-4">{text.orderText}</p>
           </li>
@@ -56,4 +55,4 @@ OrderDetails.propTypes = {
   order: orderDetailsPropType,
 };
 
-export default React.memo(OrderDetails);
+export default OrderDetails;

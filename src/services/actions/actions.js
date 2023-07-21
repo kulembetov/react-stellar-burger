@@ -1,14 +1,14 @@
-import { v4 as uuidv4 } from "uuid";
 import { createAction } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 import {
   getIngredientsData,
-  getOrderData,
   getOrdersFetch,
   getUser,
   logOut,
   login,
   patchUser,
-  postRegister,
+  postOrder,
+  postRegister
 } from "../../utils/api";
 
 // типы экшенов
@@ -134,11 +134,11 @@ export const getOrder = (number) => {
   };
 };
 
-export const postOrder = (array) => {
+export const postOrderFetch = (array) => {
   return (dispatch) => {
     dispatch({ type: POST_ORDER_REQUEST });
 
-    getOrderData(array)
+    postOrder(array)
       .then((res) => {
         dispatch({
           type: POST_ORDER_SUCCESS,
@@ -163,7 +163,7 @@ export const addIngredientsConstructor = (item, keyUuid) => {
   return {
     type: ADD_INGREDIENTS_CONSTRUCTOR,
     ingredients: item,
-    key: uuidv4(),
+    keyUuid: uuidv4(),
   };
 };
 

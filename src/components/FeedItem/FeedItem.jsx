@@ -21,37 +21,22 @@ const FeedItem = ({ order, onClick }) => {
   };
 
   // создание массива для отображения в заказе
-  const burgerIngredientsImage = order.ingredients.map((item) =>
+  const burgerIngredientsImage = order?.ingredients.map((item) =>
     findIngredient(item)
-  );
-
-  // поиск соусов и начинки
-  const saucesAndFillings = useMemo(
-    () => burgerIngredientsImage.filter((m) => m.type !== "bun"),
-    [burgerIngredientsImage]
-  );
-
-  // поиск булок
-  const bun = useMemo(
-    () => burgerIngredientsImage.filter((m) => m.type === "bun"),
-    [burgerIngredientsImage]
   );
 
   // вычисляет общую стоимость бургера
   const totalPrice = useMemo(() => {
-    const priceIngredients = saucesAndFillings.reduce((acc, item) => {
-      return acc + item.price;
+    return burgerIngredientsImage?.reduce((acc, item) => {
+      return (
+        acc +
+        (item?.type !== "bun" ? item?.price : 0) +
+        (item?.type === "bun" ? 2 * item?.price : 0)
+      );
     }, 0);
-    return (
-      priceIngredients +
-      bun.reduce((acc, item) => {
-        return acc + item.price * 2;
-      }, 0)
-    );
-  }, [saucesAndFillings, bun]);
+  }, [burgerIngredientsImage]);
 
-  // получение даты
-  const date = order.createdAt;
+  const date = order.updatedAt;
 
   // форматирование даты
   const formatDate = (date) => {
@@ -66,7 +51,7 @@ const FeedItem = ({ order, onClick }) => {
 
   // возвращает разметку, которая содержит информацию о заказе
   return (
-    <div className={`${styles.box}`} onClick={() => onClick(order)}>
+    <div className={`${styles.box}`} onClick={() => onClick()}>
       <div className={`${styles.string}`}>
         <p className={`${styles.order} text text_type_digits-default`}>
           {text.hashtag}
@@ -83,7 +68,7 @@ const FeedItem = ({ order, onClick }) => {
       </h3>
       <div className={styles.wrapper}>
         <ul className={styles.list}>
-          {burgerIngredientsImage.map((ingredient, index) => {
+          {order.ingredients.map((ingredient, index) => {
             if (index < 5) {
               return (
                 <li
@@ -93,8 +78,8 @@ const FeedItem = ({ order, onClick }) => {
                 >
                   <img
                     className={styles.image}
-                    src={ingredient.image}
-                    alt={ingredient.image_mobile}
+                    src={findIngredient(ingredient)?.image_mobile}
+                    alt={findIngredient(ingredient)?.image_mobile}
                   />
                 </li>
               );
@@ -106,15 +91,17 @@ const FeedItem = ({ order, onClick }) => {
                   className={styles.ingredient}
                 >
                   <img
-                    className={styles.last}
-                    src={ingredient.image}
-                    alt={ingredient.image_mobile}
+                    className={styles.image}
+                    src={findIngredient(ingredient)?.image_mobile}
+                    alt={findIngredient(ingredient)?.image_mobile}
                   />
+
                   <div className={styles.overlay}></div>
                   <span
                     className={`text text_type_main-default ${styles.count}`}
                   >
-                    +{burgerIngredientsImage.length - 5}
+                    {text.plus}
+                    {order.ingredients.length - 5}
                   </span>
                 </li>
               );
@@ -122,7 +109,7 @@ const FeedItem = ({ order, onClick }) => {
             return null;
           })}
         </ul>
-        <TotalPrice totalPrice={totalPrice} />
+        <TotalPrice totalPrice={totalPrice ? totalPrice : 0} />
       </div>
     </div>
   );

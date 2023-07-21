@@ -135,6 +135,8 @@
 }
 
 .count {
+  position: absolute;
+  left: 23px;
   z-index: 10000;
 }
 

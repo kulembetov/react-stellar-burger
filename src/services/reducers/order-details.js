@@ -1,6 +1,6 @@
 import {
-  MODAL_ORDER_DETAILS_CLOSE,
-  MODAL_ORDER_DETAILS_OPEN,
+  CLOSE_ORDER_DETAILS_MODAL,
+  OPEN_ORDER_DETAILS_MODAL,
   POST_ORDER_FAILED,
   POST_ORDER_REQUEST,
   POST_ORDER_SUCCESS,
@@ -26,7 +26,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
         ...state,
         orderFailed: false,
         orderRequest: false,
-        orderCurrent: action.payload,
+        orderCurrent: action.order,
       };
     }
     case POST_ORDER_FAILED: {
@@ -36,13 +36,13 @@ export const orderDetailsReducer = (state = initialState, action) => {
         orderRequest: false,
       };
     }
-    case MODAL_ORDER_DETAILS_OPEN: {
+    case OPEN_ORDER_DETAILS_MODAL: {
       return {
         ...state,
         isOpenOrder: true,
       };
     }
-    case MODAL_ORDER_DETAILS_CLOSE: {
+    case CLOSE_ORDER_DETAILS_MODAL: {
       return {
         ...state,
         isOpenOrder: false,

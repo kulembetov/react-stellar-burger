@@ -38,8 +38,12 @@
   padding: 0;
 }
 
-.number {
-  color: #00cccc;
+.success {
+  color: var(--colors-interface-success);
+}
+
+.pending {
+  color: var(--text-primary-color);
 }
 
 .large {
