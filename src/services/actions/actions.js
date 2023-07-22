@@ -1,14 +1,17 @@
+import { createAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import {
   getIngredientsData,
-  getOrderData,
+  getOrdersFetch,
   getUser,
   logOut,
   login,
   patchUser,
-  postRegister,
+  postOrder,
+  postRegister
 } from "../../utils/api";
 
+// типы экшенов
 export const GET_DATA_REQUEST = "GET_DATA_REQUEST";
 export const GET_DATA_SUCCESS = "GET_DATA_SUCCESS";
 export const GET_DATA_FAILED = "GET_DATA_FAILED";
@@ -32,6 +35,11 @@ export const CLOSE_INGREDIENT_DETAILS_MODAL = "CLOSE_INGREDIENT_DETAILS_MODAL";
 export const OPEN_ORDER_DETAILS_MODAL = "OPEN_ORDER_DETAILS_MODAL";
 export const CLOSE_ORDER_DETAILS_MODAL = "CLOSE_ORDER_DETAILS_MODAL";
 export const SET_TAB_ORDER = "SET_TAB_ORDER";
+export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
+export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
+export const GET_ORDER_FAILED = "GET_ORDER_FAILED";
+export const MODAL_ORDER_DETAILS_OPEN = "MODAL_ORDER_DETAILS_OPEN";
+export const MODAL_ORDER_DETAILS_CLOSE = "MODAL_ORDER_DETAILS_CLOSE";
 
 export const GET_USER_REQUEST = "GET_DATA_REQUEST";
 export const GET_USER_SUCCESS = "GET_DATA_SUCCESS";
@@ -56,32 +64,91 @@ export const POST_REGISTER_FAILED = "POST_REGISTER_FAILED";
 export const SET_AUTHORIZATION_CHECKED = "SET_AUTHORIZATION_CHECKED";
 export const SET_USER = "SET_USER";
 
-export const getData = () => async (dispatch) => {
-  dispatch({ type: GET_DATA_REQUEST });
+// cоздание экшенов
+export const connect = createAction("GET_ALL_ORDERS_CONNECT");
+export const disconnect = createAction("GET_ALL_ORDERS_DISCONNECT");
+export const wsConnecting = createAction("GET_ALL_ORDERS_WS_CONNECTING");
+export const wsOpen = createAction("GET_ALL_ORDERS_WS_OPEN");
+export const wsClose = createAction("GET_ALL_ORDERS_WS_CLOSE");
+export const wsMessage = createAction("GET_ALL_ORDERS_WS_MESSAGE");
+export const wsError = createAction("GET_ALL_ORDERS_WS_ERROR");
 
-  try {
-    const res = await getIngredientsData();
-    dispatch({
-      type: GET_DATA_SUCCESS,
-      data: res.data,
-    });
-  } catch (err) {
-    dispatch({ type: GET_DATA_FAILED });
-  }
+export const connectInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_CONNECT"
+);
+export const disconnectInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_DISCONNECT"
+);
+export const wsConnectingInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_WS_CONNECTING"
+);
+export const wsOpenInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_WS_OPEN"
+);
+export const wsCloseInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_WS_CLOSE"
+);
+export const wsMessageInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_WS_MESSAGE"
+);
+export const wsErrorInProfile = createAction(
+  "GET_ALL_ORDERS_IN_PROFILE_WS_ERROR"
+);
+
+// thunk экшены
+// заказы
+export const getData = () => {
+  return (dispatch) => {
+    dispatch({ type: GET_DATA_REQUEST });
+
+    getIngredientsData()
+      .then((res) => {
+        dispatch({
+          type: GET_DATA_SUCCESS,
+          data: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({ type: GET_DATA_FAILED });
+      });
+  };
 };
 
-export const postOrder = (array) => async (dispatch) => {
-  dispatch({ type: POST_ORDER_REQUEST });
-
-  try {
-    const res = await getOrderData(array);
+export const getOrder = (number) => {
+  return function (dispatch) {
     dispatch({
-      type: POST_ORDER_SUCCESS,
-      order: res,
+      type: GET_ORDER_REQUEST,
     });
-  } catch (err) {
-    dispatch({ type: POST_ORDER_FAILED });
-  }
+    getOrdersFetch(number)
+      .then((res) => {
+        dispatch({
+          type: GET_ORDER_SUCCESS,
+          order: res.orders[0],
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: GET_ORDER_FAILED,
+        });
+      });
+  };
+};
+
+export const postOrderFetch = (array) => {
+  return (dispatch) => {
+    dispatch({ type: POST_ORDER_REQUEST });
+
+    postOrder(array)
+      .then((res) => {
+        dispatch({
+          type: POST_ORDER_SUCCESS,
+          order: res,
+        });
+      })
+      .catch((err) => {
+        dispatch({ type: POST_ORDER_FAILED });
+      });
+  };
 };
 
 export const setTabIngredient = (item) => {
@@ -91,11 +158,12 @@ export const setTabIngredient = (item) => {
   };
 };
 
+// конструктор
 export const addIngredientsConstructor = (item, keyUuid) => {
   return {
     type: ADD_INGREDIENTS_CONSTRUCTOR,
     ingredients: item,
-    key: uuidv4(),
+    keyUuid: uuidv4(),
   };
 };
 
@@ -132,6 +200,7 @@ export const moveIngredient = (dragIndex, hoverIndex) => {
   };
 };
 
+// модальное окно
 export const openIngredientDetailsModal = () => {
   return {
     type: OPEN_INGREDIENT_DETAILS_MODAL,
@@ -156,24 +225,23 @@ export const closeOrderDetailsModal = () => {
   };
 };
 
+// пользователь
 export const postRegisterFetch = (array) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({ type: POST_REGISTER_REQUEST });
 
-    try {
-      const res = await postRegister(array);
-
-      if (res && res.success) {
+    postRegister(array)
+      .then((res) => {
         dispatch({
           type: POST_REGISTER_SUCCESS,
           user: setUser(res.user),
         });
-      } else {
-        dispatch({ type: POST_REGISTER_FAILED });
-      }
-    } catch (err) {
-      dispatch({ type: POST_REGISTER_FAILED });
-    }
+      })
+      .catch((err) => {
+        dispatch({
+          type: POST_REGISTER_FAILED,
+        });
+      });
   };
 };
 
@@ -188,68 +256,70 @@ export const setUser = (user) => ({
 });
 
 export const getUserFetch = () => {
-  return async (dispatch) => {
-    try {
-      const res = await getUser();
+  return function (dispatch) {
+    return getUser().then((res) => {
       dispatch(setUser(res.user));
-    } catch (err) {
-      console.log(err)
-    }
+    });
   };
 };
 
 export const patchUserFetch = (form) => {
-  return async (dispatch) => {
-    dispatch({ type: POST_SIGNIN_REQUEST });
-
-    try {
-      const res = await patchUser(form);
-
-      if (res && res.success) {
-        dispatch({ type: PATCH_USER_SUCCESS, user: res });
+  return function (dispatch) {
+    dispatch({
+      type: POST_SIGNIN_REQUEST,
+    });
+    patchUser(form)
+      .then((res) => {
+        dispatch({
+          type: PATCH_USER_SUCCESS,
+          user: res,
+        });
         dispatch(setUser(res.user));
-      } else {
-        dispatch({ type: PATCH_USER_FAILED });
-      }
-    } catch (err) {
-      dispatch({ type: PATCH_USER_FAILED });
-    }
+      })
+      .catch((err) => {
+        dispatch({
+          type: PATCH_USER_FAILED,
+        });
+      });
   };
 };
 
 export const register = (form) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({ type: POST_REGISTER_REQUEST });
 
-    try {
-      const res = await postRegister(form);
-
-      if (res && res.success) {
+    postRegister(form)
+      .then((res) => {
         localStorage.setItem("accessToken", res.accessToken);
         localStorage.setItem("refreshToken", res.refreshToken);
-        dispatch({ type: POST_REGISTER_SUCCESS, user: res });
+        dispatch({
+          type: POST_REGISTER_SUCCESS,
+          user: res,
+        });
         dispatch(setUser(res.user));
-      } else {
-        dispatch({ type: POST_REGISTER_FAILED });
-      }
-    } catch (err) {
-      dispatch({ type: POST_REGISTER_FAILED });
-    }
+        dispatch(setAuthorizationChecked(true));
+      })
+      .catch((err) => {
+        dispatch({
+          type: POST_REGISTER_FAILED,
+        });
+      });
   };
 };
 
 export const authentication = () => {
-  return async (dispatch) => {
+  return (dispatch) => {
     if (localStorage.getItem("accessToken")) {
-      try {
-        await dispatch(getUserFetch());
-      } catch (error) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch(setUser(null));
-      } finally {
-        dispatch(setAuthorizationChecked(true));
-      }
+      dispatch(getUserFetch())
+        .then(() => {
+          dispatch(setAuthorizationChecked(true));
+        })
+        .catch((error) => {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          dispatch(setUser(null));
+          dispatch(setAuthorizationChecked(true));
+        });
     } else {
       dispatch(setAuthorizationChecked(true));
     }
@@ -257,44 +327,47 @@ export const authentication = () => {
 };
 
 export const signIn = (form) => {
-  return async (dispatch) => {
-    dispatch({ type: POST_SIGNIN_REQUEST });
-
-    try {
-      const res = await login(form);
-
-      if (res && res.success) {
+  return function (dispatch) {
+    dispatch({
+      type: POST_SIGNIN_REQUEST,
+    });
+    login(form)
+      .then((res) => {
         localStorage.setItem("accessToken", res.accessToken);
         localStorage.setItem("refreshToken", res.refreshToken);
-        dispatch({ type: POST_SIGNIN_SUCCESS, user: res });
+        dispatch({
+          type: POST_SIGNIN_SUCCESS,
+          user: res,
+        });
         dispatch(setUser(res.user));
         dispatch(setAuthorizationChecked(true));
-      } else {
-        dispatch({ type: POST_SIGNIN_FAILED });
-      }
-    } catch (err) {
-      dispatch({ type: POST_SIGNIN_FAILED });
-    }
+      })
+      .catch((err) => {
+        dispatch({
+          type: POST_SIGNIN_FAILED,
+        });
+      });
   };
 };
 
 export const signOut = () => {
-  return async (dispatch) => {
-    dispatch({ type: POST_SIGNOUT_REQUEST });
-
-    try {
-      const res = await logOut();
-
-      if (res && res.success) {
+  return function (dispatch) {
+    dispatch({
+      type: POST_SIGNOUT_REQUEST,
+    });
+    logOut()
+      .then((res) => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        dispatch({ type: POST_SIGNOUT_SUCCESS });
+        dispatch({
+          type: POST_SIGNOUT_SUCCESS,
+        });
         dispatch(setUser(null));
-      } else {
-        dispatch({ type: POST_SIGNOUT_FAILED });
-      }
-    } catch (err) {
-      dispatch({ type: POST_SIGNOUT_FAILED });
-    }
+      })
+      .catch((err) => {
+        dispatch({
+          type: POST_SIGNOUT_FAILED,
+        });
+      });
   };
 };

@@ -1,0 +1,158 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-decoration: none;
+  color: white;
+  background-color: var(--background);
+  border-radius: 40px;
+  margin-right: 8px;
+  padding: 24px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.string {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.title {
+  color: var(--text-primary-color);
+  text-decoration: none;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+}
+
+.order {
+  color: var(--text-primary-color);
+  text-decoration: none;
+}
+
+.number {
+  color: var(--text-primary-color);
+  text-decoration: none;
+  position: absolute;
+  top: 20px;
+  right: -75px;
+  z-index: 100;
+}
+
+.price {
+  color: var(--text-primary-color);
+  text-decoration: none;
+  justify-self: end;
+  align-self: center;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-decoration: none;
+  color: white;
+  background-color: var(--background);
+  border-radius: 40px;
+  margin-right: 8px;
+  padding: 24px;
+  transition: opacity 0.2s ease;
+}
+
+.link:hover {
+  opacity: 0.8;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.list {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+}
+
+.item {
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(var(--background), var(--background)) padding-box,
+    linear-gradient(45deg, #801ab2, var(--colors-interface-accent)) border-box;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+}
+
+.ingredient {
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(var(--background), var(--background)) padding-box,
+    linear-gradient(45deg, #801ab2, var(--colors-interface-accent)) border-box;
+  border: 2px solid transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  border-radius: 50%;
+}
+
+.last {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.count {
+  position: absolute;
+  left: 23px;
+  z-index: 10000;
+}
+
+.item:not(:first-child),
+.ingredient {
+  margin-left: -20px;
+}
+
+.image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

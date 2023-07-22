@@ -15,19 +15,21 @@ const text = {
 
 // функциональный компонент, отображающий подробную информацию об ингредиенте
 const IngredientDetails = () => {
-  // получение состояния о выбранном ингредиенте из Redux хранилища
-  const tabIngredient = useSelector(
-    (state) => state.ingredientDetails.tabIngredient
-  );
-
-  // получение состояния из глобального хранилища
-  const { burgerIngredients } = useSelector((state) => state.burgerIngredients);
-
   // определяет метод
   const dispatch = useDispatch();
 
   // получает id из URL
   const { id } = useParams();
+
+  // получение состояния о выбранном ингредиенте из Redux хранилища
+  const tabIngredient = useSelector(
+    (state) => state.rootReducer.ingredientDetails.tabIngredient
+  );
+
+  // получение состояния из глобального хранилища
+  const { burgerIngredients } = useSelector(
+    (state) => state.rootReducer.ingredients
+  );
 
   // выбирает ингредиент и добавляет его в хранилище
   const selectIngredient = () => {

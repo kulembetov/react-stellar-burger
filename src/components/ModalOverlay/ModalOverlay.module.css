@@ -8,7 +8,7 @@
   overflow: hidden;
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 10000;
   cursor: pointer;
   transition: visibility 0s linear 0.5s, opacity 0.5s linear;
 }

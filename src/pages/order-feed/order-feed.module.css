@@ -1,0 +1,17 @@
+.box {
+  max-width: 1280px;
+  margin: 40px auto 0;
+}
+
+.title {
+  max-width: 1240px;
+  padding-left: 30px;
+}
+
+.components {
+  max-width: 1240px;
+  display: flex;
+  gap: 60px;
+  justify-content: space-between;
+  padding-left: 30px;
+}

@@ -20,7 +20,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         ...state,
         ingredients: [
           ...state.ingredients,
-          { ...action.ingredients, key: action.key },
+          { ...action.ingredients, keyUuid: action.keyUuid },
         ],
       };
     }
@@ -35,7 +35,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       return {
         ...state,
         ingredients: [...state.ingredients].filter(
-          (item) => item.key !== action.key
+          (item) => item.keyUuid !== action.keyUuid
         ),
       };
     }

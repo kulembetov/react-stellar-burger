@@ -9,11 +9,11 @@ const ProtectedRoute = ({ onlyUnAuthorized = false, component }) => {
   const location = useLocation();
 
   // получение данных пользователя из глобального состояния
-  const user = useSelector((state) => state.userReducer.user);
+  const user = useSelector((state) => state.rootReducer.user.user);
 
   // получение данных авторизации из глобального состояния
   const isAuthorizationChecked = useSelector(
-    (state) => state.userReducer.isAuthorizationChecked
+    (state) => state.rootReducer.user.isAuthorizationChecked
   );
 
   // если проверка авторизации не завершена

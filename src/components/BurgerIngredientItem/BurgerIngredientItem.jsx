@@ -11,7 +11,9 @@ import styles from "./BurgerIngredientItem.module.css";
 // функциональный компонент, отображающий информацию об ингредиенте бургера
 const BurgerIngredientItem = ({ ingredient, onTab }) => {
   // определяет состояние ингредиентов из Redux хранилища
-  const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
+  const { bun, ingredients } = useSelector(
+    (state) => state.rootReducer.burgerConstructor
+  );
 
   // обработка взятия драгом ингредиента
   const [{ isDragging }, drag] = useDrag({

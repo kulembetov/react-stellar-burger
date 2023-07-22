@@ -9,22 +9,27 @@ import styles from "./BurgerIngredient.module.css";
 // функциональный компонент, отображающий ингредиент бургера
 const BurgerIngredient = ({ ingredient, moveIngredientItem }) => {
   // определяет состояние ингредиентов из Redux хранилища
-  const { ingredients } = useSelector((state) => state.burgerConstructor);
+  const { ingredients } = useSelector(
+    (state) => state.rootReducer.burgerConstructor
+  );
+
+  // получение метода
+  const dispatch = useDispatch();
 
   // определяет использование уникального ключа при добавлении в конструктор
-  const id = ingredient.key;
+  const id = ingredient.keyUuid;
 
   // определение индекса ингредиента
   const index = ingredients.indexOf(ingredient);
 
-  // получение метода
-  const dispatch = useDispatch();
+  // указывает на внешний контейнер компонента
+  const ref = useRef(null);
 
   // удаление ингредиента
   const onDelete = () => {
     return dispatch({
       type: DELETE_INGREDIENTS_CONSTRUCTOR,
-      key: ingredient.key,
+      keyUuid: ingredient.keyUuid,
     });
   };
 
@@ -78,11 +83,6 @@ const BurgerIngredient = ({ ingredient, moveIngredientItem }) => {
       moveIngredientItem(dragIndex, hoverIndex);
     },
   });
-
-  // указывает на внешний контейнер компонента
-  const ref = useRef(null);
-
-  // перетаскивание и сброс
   const dragDropRef = drag(drop(ref));
 
   // возвращает разметку, которая содержит информацию об ингредиенте - название, цену, изображение

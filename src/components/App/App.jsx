@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import IngredientDetails from "../../components/IngredientDetails/IngredientDetails";
@@ -7,7 +9,9 @@ import Home from "../../pages/home/home";
 import Ingredient from "../../pages/ingredient/ingredient";
 import Login from "../../pages/login/login";
 import NotFound from "../../pages/not-found/not-found";
+import OrderDetails from "../../pages/order-details/order-details";
 import OrderFeed from "../../pages/order-feed/order-feed";
+import ProfileOrderDetails from "../../pages/profile-order-details/profile-order-details";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
 import Profile from "../../pages/profile/profile";
 import {
@@ -24,25 +28,21 @@ import {
   login,
   notFound,
   orderFeed,
-  ordersInProfile,
+  orderId,
   profile,
+  profileOrder,
+  profileOrderId,
   register,
   resetPassword,
 } from "../../utils/routes";
 import AppHeader from "../AppHeader/AppHeader";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
-import Loader from "../Loader/Loader";
 import Modal from "../Modal/Modal";
+import OrderInfo from "../OrderInfo/OrderInfo";
 import styles from "./App.module.css";
 
 // функциональный компонент, отображающий приложение
 export const App = () => {
-  // определяет состояние загрузки
-  const [isLoading, setIsLoading] = useState(true);
-
-  // определяет состояние для отображения ошибок
-  const [error] = useState(null);
-
   // определяет методы
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -51,20 +51,12 @@ export const App = () => {
   // фоновый роутинг для модального окна
   const background = location.state && location.state.background;
 
-  // повторное отображение страницы ингредиентов
+  // получение данных
   useEffect(() => {
-    // установка лоадера перед получением данных
-    setIsLoading(true);
-
-    // получение данных и аутентификация
     dispatch(getData());
     dispatch(authentication());
-
-    // убирает лоадер при успешном получении данных
-    setIsLoading(false);
   }, [dispatch]);
 
-  // закрытие модального окна
   const closePopup = () => {
     navigate(-1);
   };
@@ -72,11 +64,7 @@ export const App = () => {
   // возвращает разметку, содержащую приложение
   return (
     <ErrorBoundary>
-      {error ? (
-        <div className={styles.error}>{error}</div>
-      ) : isLoading ? (
-        <Loader />
-      ) : (
+      <DndProvider backend={HTML5Backend}>
         <div className={styles.app}>
           <AppHeader />
           <Routes location={background || location}>
@@ -91,10 +79,14 @@ export const App = () => {
               element={<OnlyAuthorized component={<Profile />} />}
             >
               <Route
-                path={ordersInProfile}
+                path={profileOrder}
                 element={<OnlyAuthorized component={<ProfileOrders />} />}
               />
             </Route>
+            <Route
+              path={profileOrderId}
+              element={<OnlyAuthorized component={<ProfileOrderDetails />} />}
+            />
             <Route
               path={register}
               element={<OnlyUnAuthorized component={<Register />} />}
@@ -108,6 +100,7 @@ export const App = () => {
               element={<OnlyUnAuthorized component={<ResetPassword />} />}
             />
             <Route path={orderFeed} element={<OrderFeed />} />
+            <Route path={orderId} element={<OrderDetails />} />
             <Route path={notFound} element={<NotFound />} />
           </Routes>
           {background && (
@@ -120,10 +113,26 @@ export const App = () => {
                   </Modal>
                 }
               />
+              <Route
+                path={orderId}
+                element={
+                  <Modal onClose={closePopup}>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+              <Route
+                path={profileOrderId}
+                element={
+                  <Modal onClose={closePopup}>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
             </Routes>
           )}
         </div>
-      )}
+      </DndProvider>
     </ErrorBoundary>
   );
 };

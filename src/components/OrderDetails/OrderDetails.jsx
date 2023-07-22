@@ -1,5 +1,4 @@
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
 import { useSelector } from "react-redux";
 import { orderDetailsPropType } from "../../utils/prop-types";
 import Loader from "../Loader/Loader";
@@ -15,8 +14,8 @@ const text = {
 // функциональный компонент, отображающий информацию о заказе
 const OrderDetails = () => {
   // получение состояния о заказе из Redux хранилища
-  const { orderRequest, orderFailed, orderCurrent } = useSelector(
-    (state) => state.orderDetails
+  const { orderCurrent, orderRequest, orderFailed } = useSelector(
+    (state) => state.rootReducer.orderDetails
   );
 
   // возвращает разметку, которая содержит информацию о заказе, такую как идентификатор, статус готовности заказа и текстовую информацию
@@ -56,4 +55,4 @@ OrderDetails.propTypes = {
   order: orderDetailsPropType,
 };
 
-export default React.memo(OrderDetails);
+export default OrderDetails;
