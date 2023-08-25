@@ -2,8 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import {
   connect,
   connectInProfile,
-  disconnect,
-  disconnectInProfile,
   wsClose,
   wsCloseInProfile,
   wsConnecting,
@@ -20,7 +18,6 @@ import { rootReducer } from "./reducers/root";
 
 const ordersMiddlware = socketMiddleware({
   wsConnect: connect,
-  wsDisconnect: disconnect,
   wsConnecting: wsConnecting,
   onOpen: wsOpen,
   onMessage: wsMessage,
@@ -30,7 +27,6 @@ const ordersMiddlware = socketMiddleware({
 
 const ordersProfileMiddlware = socketMiddleware({
   wsConnect: connectInProfile,
-  wsDisconnect: disconnectInProfile,
   wsConnecting: wsConnectingInProfile,
   onOpen: wsOpenInProfile,
   onMessage: wsMessageInProfile,

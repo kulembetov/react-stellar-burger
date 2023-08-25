@@ -1,5 +1,12 @@
+interface ICookieOptions {
+  expires?: Date;
+  path?: string;
+  domain?: string;
+  secure?: boolean;
+}
+
 // получает куки
-export const getCookie = (name) => {
+export const getCookie = (name: string): string | undefined => {
   const encodedName = encodeURIComponent(name);
   const cookies = document.cookie.split(";").map((cookie) => cookie.trim());
 
@@ -14,7 +21,11 @@ export const getCookie = (name) => {
 };
 
 // устанавливает куки
-export const setCookie = (name, value, options = {}) => {
+export const setCookie = (
+  name: string,
+  value: string,
+  options: ICookieOptions = {}
+): void => {
   const { expires, path, domain, secure } = options;
 
   let cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
@@ -38,8 +49,11 @@ export const setCookie = (name, value, options = {}) => {
   document.cookie = cookie;
 };
 
-// удаление куки
-export const deleteCookie = (name, options = {}) => {
+// удаляет куки
+export const deleteCookie = (
+  name: string,
+  options: ICookieOptions = {}
+): void => {
   const { path, domain } = options;
   const deletionOptions = { expires: new Date(0), path, domain };
   setCookie(name, "", deletionOptions);

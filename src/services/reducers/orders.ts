@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { WebsocketStatus } from "../../utils/orders";
 import {
   wsClose,
@@ -7,7 +7,7 @@ import {
   wsMessage,
   wsOpen,
 } from "../actions/ws";
-import { IOrder } from "../types/data";
+import { IOrder, IOrders } from "../types/data";
 
 export type TOrdersState = {
   status: string;
@@ -38,16 +38,16 @@ export const ordersReducer = createReducer(initialState, (builder) => {
       state.connectionError = "";
       state.loader = true;
     })
-    .addCase(wsMessage, (state, { payload }: any) => {
-      state.orders = payload.orders ?? [];
-      state.total = payload.total ?? null;
-      state.totalToday = payload.totalToday ?? null;
+    .addCase(wsMessage, (state, action: PayloadAction<IOrders>) => {
+      state.orders = action.payload.orders;
       state.loader = false;
+      state.total = action.payload.total;
+      state.totalToday = action.payload.totalToday;
     })
     .addCase(wsClose, (state) => {
       state.status = WebsocketStatus.OFFLINE;
     })
-    .addCase(wsError, (state, action) => {
-      state.connectionError = action.payload ?? "";
+    .addCase(wsError, (state, action: PayloadAction<string>) => {
+      state.connectionError = action.payload;
     });
 });

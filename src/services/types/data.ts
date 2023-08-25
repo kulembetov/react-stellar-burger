@@ -1,3 +1,8 @@
+import {
+  ActionCreatorWithPayload,
+  ActionCreatorWithoutPayload,
+} from "@reduxjs/toolkit";
+
 type TStatuses = "created" | "pending" | "done";
 
 export interface IIngredient {
@@ -76,6 +81,16 @@ export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
 export type THeaders = {
   authorization: string | null;
   "Content-Type": string;
+};
+
+export type TWsActionTypes = {
+  wsConnect: ActionCreatorWithPayload<string>;
+  wsSendMessage?: ActionCreatorWithPayload<any>;
+  wsConnecting: ActionCreatorWithoutPayload;
+  onOpen: ActionCreatorWithoutPayload;
+  onClose: ActionCreatorWithoutPayload;
+  onError: ActionCreatorWithPayload<string>;
+  onMessage: ActionCreatorWithPayload<any>;
 };
 
 export interface IPatchUserObject {

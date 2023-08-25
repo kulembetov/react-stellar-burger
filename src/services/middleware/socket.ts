@@ -1,77 +1,60 @@
-import { MiddlewareAPI } from "redux";
+import { Middleware, MiddlewareAPI } from "redux";
+import { getUserFetch } from "../actions/user";
+import { AppDispatch, RootState } from "../types";
+import { TWsActionTypes } from "../types/data";
 
 // WebSocket Middleware
-export const socketMiddleware: any = (wsActions: any) => {
-  return (store: MiddlewareAPI) => {
-    // создание переменной для хранения экземпляра WebSocket
-    let socket: any = null;
 
-    return (next: any) => (action: any) => {
+export const socketMiddleware = (wsActions: TWsActionTypes): Middleware => {
+  return (store: MiddlewareAPI<AppDispatch, RootState>) => {
+    let socket: WebSocket | null = null;
+
+    return (next) => (action) => {
       const { dispatch } = store;
-      const { type } = action;
+
       const {
         wsConnect,
+        wsConnecting,
         wsSendMessage,
         onOpen,
         onClose,
         onError,
         onMessage,
-        wsConnecting,
-        wsDisconnect,
       } = wsActions;
 
-      // если экшен - запрос на соединение с WebSocket
-      if (type === wsConnect.type) {
-        // создание нового экземпляра WebSocket с указанным адресом
+      if (wsConnect.match(action)) {
         socket = new WebSocket(action.payload);
-        // диспатч экшена, чтобы обозначить, что происходит соединение
         dispatch(wsConnecting());
       }
-
-      // если сокет уже создан, настройка обработчиков событий
       if (socket) {
-        // обработчик события открытия соединения
         socket.onopen = () => {
           dispatch(onOpen());
         };
 
-        // обработчик события ошибки
         socket.onerror = () => {
           dispatch(onError("Произошла ошибка с WebSocket"));
         };
 
-        // обработчик события получения сообщения от WebSocket
-        socket.onmessage = (event: any) => {
+        socket.onmessage = (event) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
 
-          // диспатч экшена с полученными данными
-          dispatch(onMessage(parsedData));
+          if (parsedData.message === "Invalid or missing token") {
+            dispatch(getUserFetch());
+          } else {
+            dispatch(onMessage(parsedData));
+          }
         };
 
-        // обработчик события закрытия соединения
         socket.onclose = () => {
           dispatch(onClose());
-          // сброс переменной для возможности повторного соединения
-          socket = null;
         };
 
-        // если экшен - отправка сообщения через WebSocket
-        if (wsSendMessage && type === wsSendMessage.type) {
-          // отправка сообщения в JSON-формате
+        if (wsSendMessage?.match(action)) {
           socket.send(JSON.stringify(action.payload));
-        }
-
-        // если экшен - запрос на закрытие соединения с WebSocket
-        if (wsDisconnect.type === type) {
-          // закрытие соединение
-          socket.close();
-          // сброс переменной для возможности повторного соединения
-          socket = null;
         }
       }
 
-      // передача управления дальше по цепочке middleware и reducers
       next(action);
     };
   };

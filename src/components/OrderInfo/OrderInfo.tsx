@@ -27,7 +27,7 @@ const text = {
 const OrderInfo = () => {
   // определение методов
   const dispatch = useAppDispatch();
-  const { id } = useParams<keyof IParams>() as IParams;
+  const { id } = useParams<keyof IParams>();
 
   // извлекает идентификатор заказа из параметров URL
   const orderId = Number(id);

@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { WebsocketStatus } from "../../utils/orders";
 import {
   wsCloseInProfile,
@@ -7,7 +7,7 @@ import {
   wsMessageInProfile,
   wsOpenInProfile,
 } from "../actions/ws";
-import { IOrder } from "../types/data";
+import { IOrder, IOrders } from "../types/data";
 
 export type TProfileOrdersState = {
   status: string;
@@ -34,14 +34,14 @@ export const profileOrdersReducer = createReducer(initialState, (builder) => {
       state.connectionError = "";
       state.loader = true;
     })
-    .addCase(wsMessageInProfile, (state, { payload }: any) => {
-      state.orders = payload.orders ?? [];
+    .addCase(wsMessageInProfile, (state, action: PayloadAction<IOrders>) => {
+      state.orders = action.payload.orders;
       state.loader = false;
     })
     .addCase(wsCloseInProfile, (state) => {
       state.status = WebsocketStatus.OFFLINE;
     })
-    .addCase(wsErrorInProfile, (state, action) => {
+    .addCase(wsErrorInProfile, (state, action: PayloadAction<string>) => {
       state.connectionError = action.payload ?? "";
     });
 });
