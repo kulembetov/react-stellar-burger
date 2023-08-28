@@ -57,9 +57,9 @@ const BurgerIngredientItem: FC<IBurgerIngredientItemProps> = ({ ingredient, onTa
       onClick={() => onTab(ingredient)}
     >
       {ingredient.type !== "bun" ? (
-        <Counter count={counter || 0} className={styles.counter} />
+        <Counter count={counter || 0} />
       ) : (
-        <Counter count={counterForBun || 0} className={styles.counter} />
+        <Counter count={counterForBun || 0} />
       )}
       <img className="pt-1 pb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price}>

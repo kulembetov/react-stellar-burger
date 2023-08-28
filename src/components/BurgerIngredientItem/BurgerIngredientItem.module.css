@@ -7,10 +7,6 @@
   cursor: pointer;
 }
 
-.counter {
-  position: fixed;
-}
-
 .price {
   display: flex;
   color: white;
