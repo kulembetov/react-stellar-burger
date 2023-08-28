@@ -4,8 +4,8 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-left: 0;
+  padding: 0;
+  padding-right: 7px;
 }
 
 .list::-webkit-scrollbar {
@@ -30,8 +30,6 @@
   box-sizing: border-box;
   margin: 0 auto;
   padding-top: 100px;
-  padding-left: 16px;
-  padding-right: 16px;
 }
 
 .order {
@@ -52,13 +50,22 @@
   padding-left: 43px;
 }
 
-.empty{
-  border: 5px dotted #8585ad1a;
+.active {
+  border: 5px solid #4c4cff;
+  border-radius: 10px;
+  transition: 0.2s ease-in-out;
+}
+
+.inactive {
+  border: 5px solid transparent;
+  border-radius: 10px;
+  transition: 0.1s ease-in-out;
+}
+
+.empty {
+  border: 5px solid transparent;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.active {
-  border: 1px solid #4C4CFF;
 }
